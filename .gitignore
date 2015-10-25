@@ -1,6 +1,6 @@
-.settings
+/.settings
+/.sign
 .build*
 *signature*.xml
 *.wgt
 .*_delta*
-/.sign/.manifest.tmp

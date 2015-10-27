@@ -130,7 +130,7 @@ function activate() {
 	document.querySelector('#heartrate_level').textContent = '-';
 	oldHeartRate = 0;
 	hrmFailCount = 0;
-	window.webapis.motion.start('HRM', updateHeartRate);
+	tizen.humanactivitymonitor.start('HRM', updateHeartRate);
 	
 	battery.addEventListener('levelchange', updateBatteryState);
 	updateBatteryState();
@@ -139,7 +139,7 @@ function activate() {
 function deactivate() {
 	clearInterval(timeUpdateTimer);
 
-	window.webapis.motion.stop('HRM');
+	tizen.humanactivitymonitor.stop('HRM');
 	
 	battery.removeEventListener('levelchange', updateBatteryState);
 }

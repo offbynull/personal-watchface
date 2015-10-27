@@ -53,11 +53,11 @@ function updateHeartRate(hrmInfo)  {
 	if (hrmInfo.heartRate == 0) {
 		hrmFailCount++;
 		elem.textContent = 'R' + hrmFailCount;
-		if (hrmFailCount % 100 == 0) {
-			// Sometimes a pulse is never picked up. After about 10 seconds, if you haven't recvd a pulse, reset the HRM
-			window.webapis.motion.stop('HRM');
-			window.webapis.motion.start('HRM', updateHeartRate);
-		}
+//		if (hrmFailCount % 100 == 0) {
+//			// Sometimes a pulse is never picked up. After about 10 seconds, if you haven't recvd a pulse, reset the HRM
+//			tizen.humanactivitymonitor.stop('HRM');
+//			tizen.humanactivitymonitor.start('HRM', updateHeartRate);
+//		}
 	} else if (hrmInfo.heartRate >= 0) {
 		// Heartrate numbers were taken from calculations on http://www.livestrong.com/article/208307-how-to-calculate-heart-rate-for-fat-burn/
 		// Adjusted for 31 yearold individual

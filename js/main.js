@@ -43,36 +43,53 @@ function updateTime() {
 }
 
 function updateBatteryState()  {
-   var level = Math.floor(battery.level * 100);
-   document.querySelector('#battery_level').textContent = Math.floor(battery.level * 100);
+	var elem = document.querySelector('#battery_level');
+	var elem_outter = document.querySelector('#battery');
+   
+	var level = Math.floor(battery.level * 100);
+	elem.textContent = Math.floor(battery.level * 100);
+	
+	if (level <= 25) {
+		elem_outter.style.color = 'red';
+	} else if (level <= 50) {
+		elem_outter.style.color = 'yellow';
+	} else {
+		elem_outter.style.color = '';
+	}
 }
+
+SPINNER = ['|', '/', '-', '\\'];
 
 function updateHeartRate(hrmInfo)  {
 	var elem = document.querySelector('#heartrate_level');
+	var elem_outter = document.querySelector('#heartrate');
 	
 	if (hrmInfo.heartRate == 0) {
 		hrmFailCount++;
-		elem.textContent = 'R' + hrmFailCount;
-//		if (hrmFailCount % 100 == 0) {
-//			// Sometimes a pulse is never picked up. After about 10 seconds, if you haven't recvd a pulse, reset the HRM
-//			tizen.humanactivitymonitor.stop('HRM');
-//			tizen.humanactivitymonitor.start('HRM', updateHeartRate);
-//		}
+		 
+		elem.textContent = SPINNER[hrmFailCount % SPINNER.length];
+		if (hrmFailCount % 200 == 0) {
+			// If you get 201 0's in a row, the sensor gives up. Close it and re-open it to try again.
+			tizen.humanactivitymonitor.stop('HRM');
+			tizen.humanactivitymonitor.start('HRM', updateHeartRate);
+		}
+		
+		elem_outter.style.color = '';
 	} else if (hrmInfo.heartRate >= 0) {
 		// Heartrate numbers were taken from calculations on http://www.livestrong.com/article/208307-how-to-calculate-heart-rate-for-fat-burn/
 		// Adjusted for 31 yearold individual
 		if (hrmInfo.heartRate < 103.95) {
-			document.body.style.backgroundColor = 'black';
+			elem_outter.style.color = '';
 			if (oldHeartRate >= 103.95) {
 				navigator.vibrate(2000);
 			}
 		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
-			document.body.style.backgroundColor = 'green';
+			elem_outter.style.color = 'green';
 			if (oldHeartRate < 103.95 || oldHeartRate > 132.3) {
 				navigator.vibrate(2000);
 			}
 		} else {
-			document.body.style.backgroundColor = 'red';
+			elem_outter.style.color = 'red';
 			if (oldHeartRate <= 132.3) {
 				navigator.vibrate(2000);
 			}
@@ -82,11 +99,26 @@ function updateHeartRate(hrmInfo)  {
 		oldHeartRate = hrmInfo.heartRate;
 	} else if (hrmInfo.heartRate == -3){
 		elem.textContent = 'OFF';
-		document.body.style.backgroundColor = 'black';
+		elem_outter.style.color = '';
 	} else if (hrmInfo.heartRate == -2){
 		elem.textContent = 'SHK';
-		document.body.style.backgroundColor = 'black';
+		elem_outter.style.color = '';
 	}
+}
+
+function updatePedometer(pedometerInfo) {
+	var elem = document.querySelector('#pedometer_level');
+	var elem_outter = document.querySelector('#pedometer');
+
+	if (pedometerInfo.stepStatus == 'WALKING') {
+		elem_outter.style.color = 'green';
+	} else if (pedometerInfo.stepStatus == 'NOT_MOVING') {
+		elem_outter.style.color = '';
+	} else {
+		elem_outter.style.color = 'yellow';
+	}
+	
+	elem.textContent = pedometerInfo.speed;
 }
 
 function timerSwitched() {
@@ -122,15 +154,23 @@ function init() {
 }
 
 function activate() {
+	document.querySelector('#battery').style.color = '';
+	document.querySelector('#battery_level').textContent = '';
+	document.querySelector('#pedometer').style.color = '';
+	document.querySelector('#pedometer_level').textContent = '';
+	document.querySelector('#heartrate').style.color = '';
+	document.querySelector('#heartrate_level').textContent = '';
+	
 	rssInit();
 	
 	updateTime();
 	timeUpdateTimer = setInterval(updateTime, 500);
 	
-	document.querySelector('#heartrate_level').textContent = '-';
 	oldHeartRate = 0;
 	hrmFailCount = 0;
 	tizen.humanactivitymonitor.start('HRM', updateHeartRate);
+	
+	tizen.humanactivitymonitor.setAccumulativePedometerListener(updatePedometer);
 	
 	battery.addEventListener('levelchange', updateBatteryState);
 	updateBatteryState();
@@ -140,6 +180,8 @@ function deactivate() {
 	clearInterval(timeUpdateTimer);
 
 	tizen.humanactivitymonitor.stop('HRM');
+	
+	tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
 	
 	battery.removeEventListener('levelchange', updateBatteryState);
 }

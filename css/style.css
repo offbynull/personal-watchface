@@ -94,10 +94,20 @@ h1 {
 
 .data_text {
 	font-family: 'Orbitron';
-	font-size: 24px;
+	font-size: 32px;
 	color: white;
 	text-align: center;
 	width: 100%;
+}
+
+.data_text .small_text {
+	font-size: 14px;
+}
+
+.data_text .data_item {
+	display: inline-block;
+	width: 30%;
+	text-align: center;
 }
 
 .news_text {
@@ -134,7 +144,7 @@ h1 {
 
 .table_item {
     width: 50%;
-    float:left; /* add this */
+    float:left;
     border: 0px;
     margin: 0px;
     padding: 0px;

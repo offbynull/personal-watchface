@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://offbynull.com/PersonalWatchFace" version="1.0.0" viewmodes="maximized">
+    <access origin="http://feeds.arstechnica.com" subdomains="true"></access>
     <tizen:application id="w1sFLJg1cH.PersonalWatchFace" package="w1sFLJg1cH" required_version="2.3.1" ambient_support="enable"/>
     <tizen:category name="http://tizen.org/category/wearable_clock"/>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <feature name="http://tizen.org/feature/sensor.heart_rate_monitor"/>
     <feature name="http://tizen.org/feature/humanactivitymonitor"/>
+    <feature name="http://tizen.org/feature/sensor.pedometer"/>
     <icon src="icon.png"/>
     <name>PersonalWatchFace</name>
     <tizen:privilege name="http://tizen.org/privilege/alarm"/>
@@ -15,5 +17,4 @@
     <tizen:privilege name="http://tizen.org/privilege/application.info"/>
     <tizen:profile name="wearable"/>
     <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
-    <access origin="http://feeds.arstechnica.com" subdomains="true"></access>
 </widget>

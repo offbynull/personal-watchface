@@ -29,15 +29,29 @@ limitations under the License.
 <script src="js/main.js"></script>
 
 
-<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/font-awesome.min.css">
+
 </head>
 <body onload="init()">
 	<div class="fill_outter">
 		<div class="fill_inner">
 			<div class="fill_inner_inner">
 				<p id="time" class="watch_text"></p>
-				<p id="sensor" class="data_text">Heartrate: <span id="heartrate_level"></span>bpm</p>
-				<p id="battery" class="data_text">Battery: <span id="battery_level"></span>%</p>
+				<div class="data_text" id="sensor">
+					<div class="data_item" id="heartrate">
+						<i class="fa fa-heartbeat"></i><span id="heartrate_level"></span><br>
+						<span class='small_text'>bpm</span>
+					</div>
+					<div class="data_item" id="battery">
+						<i class="fa fa-battery-4"></i> <span id="battery_level"></span><br>
+						<span class='small_text'>%</span>
+					</div>
+					<div class="data_item" id="pedometer">
+						<i class="fa fa-tachometer"></i> <span id="pedometer_level"></span><br>
+						<span class='small_text'>km/h</span>
+					</div>
+				</div>
 				<p id="news" class="news_text"></p>
 				
 				<div class="table">

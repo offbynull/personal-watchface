@@ -94,14 +94,14 @@ h1 {
 
 .data_text {
 	font-family: 'Orbitron';
-	font-size: 32px;
+	font-size: 28px;
 	color: white;
 	text-align: center;
 	width: 100%;
 }
 
 .data_text .small_text {
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .data_text .data_item {

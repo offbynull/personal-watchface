@@ -44,17 +44,27 @@ function updateTime() {
 
 function updateBatteryState()  {
 	var elem = document.querySelector('#battery_level');
+	var elem_icon = document.querySelector('#battery_icon');
 	var elem_outter = document.querySelector('#battery');
    
 	var level = Math.floor(battery.level * 100);
 	elem.textContent = Math.floor(battery.level * 100);
 	
-	if (level <= 25) {
+	if (level <= 20) {
 		elem_outter.style.color = 'red';
-	} else if (level <= 50) {
+		elem_icon.className = 'fa fa-battery-0'
+	} else if (level <= 40) {
 		elem_outter.style.color = 'yellow';
+		elem_icon.className = 'fa fa-battery-1'
+	} else if (level <= 60) {
+		elem_outter.style.color = '';
+		elem_icon.className = 'fa fa-battery-2'
+	} else if (level <= 80) {
+		elem_outter.style.color = '';
+		elem_icon.className = 'fa fa-battery-3'
 	} else {
 		elem_outter.style.color = '';
+		elem_icon.className = 'fa fa-battery-4'
 	}
 }
 

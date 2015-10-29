@@ -50,21 +50,21 @@ function updateBatteryState()  {
 	var level = Math.floor(battery.level * 100);
 	elem.textContent = Math.floor(battery.level * 100);
 	
-	if (level <= 20) {
+	if (level < 10) { // 0 - 9
 		elem_outter.style.color = 'red';
-		elem_icon.className = 'fa fa-battery-0'
-	} else if (level <= 40) {
+		elem_icon.className = 'fa fa-battery-0';
+	} else if (level <= 30) { // 10 - 30 
 		elem_outter.style.color = 'yellow';
-		elem_icon.className = 'fa fa-battery-1'
-	} else if (level <= 60) {
+		elem_icon.className = 'fa fa-battery-1';
+	} else if (level <= 60) { // 31 - 60
 		elem_outter.style.color = '';
-		elem_icon.className = 'fa fa-battery-2'
-	} else if (level <= 80) {
+		elem_icon.className = 'fa fa-battery-2';
+	} else if (level < 90) { // 61 - 89
 		elem_outter.style.color = '';
-		elem_icon.className = 'fa fa-battery-3'
-	} else {
+		elem_icon.className = 'fa fa-battery-3';
+	} else { // 90 - 100
 		elem_outter.style.color = '';
-		elem_icon.className = 'fa fa-battery-4'
+		elem_icon.className = 'fa fa-battery-4';
 	}
 }
 

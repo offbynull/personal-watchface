@@ -94,7 +94,7 @@ function updateHeartRate(hrmInfo)  {
 				navigator.vibrate(2000);
 			}
 		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
-			elem_outter.style.color = 'green';
+			elem_outter.style.color = 'lime';
 			if (oldHeartRate < 103.95 || oldHeartRate > 132.3) {
 				navigator.vibrate(2000);
 			}
@@ -121,7 +121,7 @@ function updatePedometer(pedometerInfo) {
 	var elem_outter = document.querySelector('#pedometer');
 
 	if (pedometerInfo.stepStatus == 'WALKING') {
-		elem_outter.style.color = 'green';
+		elem_outter.style.color = 'lime';
 	} else if (pedometerInfo.stepStatus == 'NOT_MOVING') {
 		elem_outter.style.color = '';
 	} else {

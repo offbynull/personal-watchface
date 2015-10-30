@@ -149,8 +149,15 @@ function screenStateSwitched() {
 	}
 }
 
+function permHrmSwitched() {
+	var checkbox = document.querySelector('#permHrmSwitch');
+	constantHrm = checkbox.checked;
+}
+
 function init() {
 	battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
+	
+	constantHrm = false;
 	
 	document.addEventListener('visibilitychange', function() {
 	    if (document.hidden) {
@@ -176,9 +183,11 @@ function activate() {
 	updateTime();
 	timeUpdateTimer = setInterval(updateTime, 500);
 	
-	oldHeartRate = 0;
-	hrmFailCount = 0;
-	tizen.humanactivitymonitor.start('HRM', updateHeartRate);
+	if (constantHrm === false) {
+		oldHeartRate = 0;
+		hrmFailCount = 0;
+		tizen.humanactivitymonitor.start('HRM', updateHeartRate);
+	}
 	
 	tizen.humanactivitymonitor.setAccumulativePedometerListener(updatePedometer);
 	
@@ -189,7 +198,9 @@ function activate() {
 function deactivate() {
 	clearInterval(timeUpdateTimer);
 
-	tizen.humanactivitymonitor.stop('HRM');
+	if (constantHrm === false) {
+		tizen.humanactivitymonitor.stop('HRM');
+	}
 	
 	tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
 	

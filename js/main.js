@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2015 Kasra Faghihi. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -78,6 +78,7 @@ function updateHeartRate(hrmInfo)  {
 		hrmFailCount++;
 		 
 		elem.textContent = SPINNER[hrmFailCount % SPINNER.length];
+		lastHeartRate = hrmInfo.heartRate;
 		if (hrmFailCount % 200 == 0) {
 			// If you get 201 0's in a row, the sensor gives up. Close it and re-open it to try again.
 			tizen.humanactivitymonitor.stop('HRM');
@@ -104,9 +105,9 @@ function updateHeartRate(hrmInfo)  {
 				navigator.vibrate(2000);
 			}
 		}
-		elem.textContent = hrmInfo.heartRate;
 		
-		oldHeartRate = hrmInfo.heartRate;
+		elem.textContent = hrmInfo.heartRate;
+		lastHeartRate = hrmInfo.heartRate;
 	} else if (hrmInfo.heartRate == -3){
 		elem.textContent = 'OFF';
 		elem_outter.style.color = '';
@@ -129,6 +130,7 @@ function updatePedometer(pedometerInfo) {
 	}
 	
 	elem.textContent = pedometerInfo.speed;
+	lastSpeed = pedometerInfo.speed;
 }
 
 function timerSwitched() {
@@ -140,24 +142,72 @@ function timerSwitched() {
 	}
 }
 
-function screenStateSwitched() {
-	var checkbox = document.querySelector('#screenStateSwitch');
-	if(checkbox.checked === true) {
-		tizen.power.request('SCREEN', 'SCREEN_NORMAL');
-	} else {
-		tizen.power.release('SCREEN');
-	}
-}
+function sportSwitched() {
+	var elem = document.querySelector('#sport_chart');
 
-function permHrmSwitched() {
-	var checkbox = document.querySelector('#permHrmSwitch');
-	constantHrm = checkbox.checked;
+	var checkbox = document.querySelector('#sportSwitch');
+	if(checkbox.checked === true) {
+		tizen.power.request('CPU', 'CPU_AWAKE');
+		
+		var data = {
+			    labels: [],
+			    labelsFilter: function (label) { return true },
+			    datasets: [
+			        {
+			            label: 'HRM',
+			            fillColor: 'rgba(220,220,220,0.2)',
+			            data: []
+			        },
+			        {
+			            label: 'Speed',
+			            fillColor: 'rgba(151,187,205,0.2)',
+			            data: []
+			        }
+			    ]
+			};
+		
+		var options = {
+				animation: false,
+				responsive: false,
+				maintainAspectRatio: false,
+				showTooltips: false,
+			    scaleShowGridLines : false,
+			    scaleGridLineColor : 'rgba(0,0,0,.05)',
+			    scaleGridLineWidth : 1,
+			    scaleShowHorizontalLines: false,
+			    scaleShowVerticalLines: false,
+			    bezierCurve : false,
+			    pointDot : false,
+			    datasetStroke : true,
+			    datasetStrokeWidth : 2,
+			    datasetFill : true,
+			};
+		
+		sportChart = new Chart(elem.getContext('2d')).Line(data, options);
+		
+		sportChartCount = 0;
+		sportChartMaxCount = 60 * 60; // number of seconds in an hour
+		sportChartUpdater = setInterval(function() {
+			sportChartCount++;
+			if (sportChartCount >= sportChartMaxCount) {
+				sportChart.removeData();
+			}
+			sportChart.addData([lastHeartRate, lastSpeed], "");
+		}, 1000); // call once a second
+	} else {
+		tizen.power.release('CPU');
+		
+		sportChart.clear();
+		sportChart.destroy();
+		clearInterval(sportChartUpdater);
+	}
 }
 
 function init() {
 	battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
 	
-	constantHrm = false;
+	lastHeartRate = 0;
+	lastSpeed = 0;
 	
 	document.addEventListener('visibilitychange', function() {
 	    if (document.hidden) {
@@ -172,24 +222,23 @@ function init() {
 
 function activate() {
 	document.querySelector('#battery').style.color = '';
-	document.querySelector('#battery_level').textContent = '';
+	document.querySelector('#battery_level').textContent = '-';
 	document.querySelector('#pedometer').style.color = '';
-	document.querySelector('#pedometer_level').textContent = '';
+	document.querySelector('#pedometer_level').textContent = '-';
 	document.querySelector('#heartrate').style.color = '';
-	document.querySelector('#heartrate_level').textContent = '';
+	document.querySelector('#heartrate_level').textContent = '-';
 	
 	rssInit();
 	
 	updateTime();
 	timeUpdateTimer = setInterval(updateTime, 500);
 	
-	if (constantHrm === false) {
+	if (document.querySelector('#sportSwitch').checked === false) {
 		oldHeartRate = 0;
 		hrmFailCount = 0;
 		tizen.humanactivitymonitor.start('HRM', updateHeartRate);
+		tizen.humanactivitymonitor.setAccumulativePedometerListener(updatePedometer);
 	}
-	
-	tizen.humanactivitymonitor.setAccumulativePedometerListener(updatePedometer);
 	
 	battery.addEventListener('levelchange', updateBatteryState);
 	updateBatteryState();
@@ -198,11 +247,10 @@ function activate() {
 function deactivate() {
 	clearInterval(timeUpdateTimer);
 
-	if (constantHrm === false) {
+	if (document.querySelector('#sportSwitch').checked === false) {
 		tizen.humanactivitymonitor.stop('HRM');
+		tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
 	}
-	
-	tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
 	
 	battery.removeEventListener('levelchange', updateBatteryState);
 }

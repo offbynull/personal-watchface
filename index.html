@@ -25,6 +25,7 @@ limitations under the License.
 
 <title>Personal Watchface</title>
 
+<script src="js/chart.min.js"></script>
 <script src="js/rss.js"></script>
 <script src="js/main.js"></script>
 
@@ -37,6 +38,7 @@ limitations under the License.
 	<div class="fill_outter">
 		<div class="fill_inner">
 			<div class="fill_inner_inner">
+				<canvas id="sport_chart"></canvas>
 				<p id="time" class="watch_text"></p>
 				<div class="data_text" id="sensor">
 					<div class="data_item" id="heartrate">
@@ -56,10 +58,10 @@ limitations under the License.
 				
 				<div class="table">
 					<div class="table_item">
-						<span class="switch_text">Stay On</span>
+						<span class="switch_text">Sport</span>
 						<div class="onoffswitch">
-						    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="screenStateSwitch" onchange="screenStateSwitched(this)">
-					    	<label class="onoffswitch-label" for="screenStateSwitch">
+						    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="sportSwitch" onchange="sportSwitched(this)">
+					    	<label class="onoffswitch-label" for="sportSwitch">
 						        <span class="onoffswitch-inner"></span>
 						        <span class="onoffswitch-switch"></span>
 						    </label>
@@ -75,16 +77,6 @@ limitations under the License.
 						        <span class="onoffswitch-switch"></span>
 						    </label>
 						</div>
-					</div>
-
-
-					<span class="switch_text">Perm HRM</span>
-					<div class="onoffswitch">
-					    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="permHrmSwitch" onchange="permHrmSwitched(this)">
-					    <label class="onoffswitch-label" for="permHrmSwitch">
-					        <span class="onoffswitch-inner"></span>
-					        <span class="onoffswitch-switch"></span>
-					    </label>
 					</div>
 				</div>
 			</div>

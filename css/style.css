@@ -158,6 +158,7 @@ h1 {
 	width:320px;
 	height:320px;
 	margin:0px;
+	pointer-events:none; /* If not present, stops news item from getting click input */ 
 }
 
 

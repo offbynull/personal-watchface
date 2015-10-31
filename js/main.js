@@ -50,19 +50,19 @@ function updateBatteryState()  {
 	var level = Math.floor(battery.level * 100);
 	elem.textContent = Math.floor(battery.level * 100);
 	
-	if (level < 10) { // 0 - 9
+	if (level <= 20) {
 		elem_outter.style.color = 'red';
 		elem_icon.className = 'fa fa-battery-0';
-	} else if (level <= 30) { // 10 - 30 
+	} else if (level <= 40) { 
 		elem_outter.style.color = 'yellow';
 		elem_icon.className = 'fa fa-battery-1';
-	} else if (level <= 60) { // 31 - 60
+	} else if (level <= 60) {
 		elem_outter.style.color = '';
 		elem_icon.className = 'fa fa-battery-2';
-	} else if (level < 90) { // 61 - 89
+	} else if (level < 80) {
 		elem_outter.style.color = '';
 		elem_icon.className = 'fa fa-battery-3';
-	} else { // 90 - 100
+	} else {
 		elem_outter.style.color = '';
 		elem_icon.className = 'fa fa-battery-4';
 	}
@@ -92,17 +92,20 @@ function updateHeartRate(hrmInfo)  {
 		if (hrmInfo.heartRate < 103.95) {
 			elem_outter.style.color = '';
 			if (oldHeartRate >= 103.95) {
-				navigator.vibrate(2000);
+				// Will not work if screen isn't on
+				// navigator.vibrate(2000);
 			}
 		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
 			elem_outter.style.color = 'lime';
 			if (oldHeartRate < 103.95 || oldHeartRate > 132.3) {
-				navigator.vibrate(2000);
+				// Will not work if screen isn't on
+				// navigator.vibrate(2000);
 			}
 		} else {
 			elem_outter.style.color = 'red';
 			if (oldHeartRate <= 132.3) {
-				navigator.vibrate(2000);
+				// Will not work if screen isn't on
+				// navigator.vibrate(2000);
 			}
 		}
 		
@@ -115,6 +118,8 @@ function updateHeartRate(hrmInfo)  {
 		elem.textContent = 'SHK';
 		elem_outter.style.color = '';
 	}
+	
+	oldHeartRate = hrmInfo.heartRate;
 }
 
 function updatePedometer(pedometerInfo) {
@@ -149,22 +154,24 @@ function sportSwitched() {
 	if(checkbox.checked === true) {
 		tizen.power.request('CPU', 'CPU_AWAKE');
 
-		sportChartCount = 0;
 		sportChartMaxCount = 60 * 60 / 10; // number of seconds in an hour / 10
+		sportChartCount = 60 * 60 / 10; // pretend like we've got a full count of points, because initial points is array of maxCount 0s
 		
 		var data = {
-			    labels: [],
+			    labels: Array.apply(null, new Array(sportChartMaxCount)).map(String.prototype.valueOf, ''),
 			    labelsFilter: function (label) { return true },
 			    datasets: [
 			        {
 			            label: 'HRM',
 			            fillColor: 'rgba(220,220,220,0.2)',
-			            data: new Uint8Array(sportChartMaxCount)
+			            strokeColor: "rgba(220,220,220,1)",
+			            data: Array.apply(null, new Array(sportChartMaxCount)).map(Number.prototype.valueOf, 0),
 			        },
 			        {
 			            label: 'Speed',
 			            fillColor: 'rgba(151,187,205,0.2)',
-			            data: new Uint8Array(sportChartMaxCount)
+			            strokeColor: "rgba(151,187,205,1)",
+			            data: Array.apply(null, new Array(sportChartMaxCount)).map(Number.prototype.valueOf, 0),
 			        }
 			    ]
 			};
@@ -190,12 +197,14 @@ function sportSwitched() {
 		
 
 		sportChartUpdater = setInterval(function() {
-			sportChartCount++;
-			if (sportChartCount >= sportChartMaxCount) {
+			while (sportChartCount >= sportChartMaxCount) {
 				sportChart.removeData();
+				sportChartCount--;
 			}
-			sportChart.addData([lastHeartRate, lastSpeed], "");
-		}, 10000); // call once every 10 seconds
+			
+			sportChart.addData([lastHeartRate, lastSpeed], '');
+			sportChartCount++;
+		}, 1000); // call once every 10 seconds
 	} else {
 		tizen.power.release('CPU');
 		
@@ -223,25 +232,24 @@ function init() {
 }
 
 function activate() {
-	document.querySelector('#battery').style.color = '';
-	document.querySelector('#battery_level').textContent = '-';
-	document.querySelector('#pedometer').style.color = '';
-	document.querySelector('#pedometer_level').textContent = '-';
-	document.querySelector('#heartrate').style.color = '';
-	document.querySelector('#heartrate_level').textContent = '-';
-	
 	rssInit();
 	
 	updateTime();
 	timeUpdateTimer = setInterval(updateTime, 500);
 	
 	if (document.querySelector('#sportSwitch').checked === false) {
+		document.querySelector('#pedometer').style.color = '';
+		document.querySelector('#pedometer_level').textContent = '-';
+		document.querySelector('#heartrate').style.color = '';
+		document.querySelector('#heartrate_level').textContent = '-';
 		oldHeartRate = 0;
 		hrmFailCount = 0;
 		tizen.humanactivitymonitor.start('HRM', updateHeartRate);
 		tizen.humanactivitymonitor.setAccumulativePedometerListener(updatePedometer);
 	}
 	
+	document.querySelector('#battery').style.color = '';
+	document.querySelector('#battery_level').textContent = '-';
 	battery.addEventListener('levelchange', updateBatteryState);
 	updateBatteryState();
 }

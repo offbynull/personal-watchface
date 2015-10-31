@@ -148,6 +148,9 @@ function sportSwitched() {
 	var checkbox = document.querySelector('#sportSwitch');
 	if(checkbox.checked === true) {
 		tizen.power.request('CPU', 'CPU_AWAKE');
+
+		sportChartCount = 0;
+		sportChartMaxCount = 60 * 60 / 10; // number of seconds in an hour / 10
 		
 		var data = {
 			    labels: [],
@@ -156,12 +159,12 @@ function sportSwitched() {
 			        {
 			            label: 'HRM',
 			            fillColor: 'rgba(220,220,220,0.2)',
-			            data: []
+			            data: new Uint8Array(sportChartMaxCount)
 			        },
 			        {
 			            label: 'Speed',
 			            fillColor: 'rgba(151,187,205,0.2)',
-			            data: []
+			            data: new Uint8Array(sportChartMaxCount)
 			        }
 			    ]
 			};
@@ -185,15 +188,14 @@ function sportSwitched() {
 		
 		sportChart = new Chart(elem.getContext('2d')).Line(data, options);
 		
-		sportChartCount = 0;
-		sportChartMaxCount = 60 * 60; // number of seconds in an hour
+
 		sportChartUpdater = setInterval(function() {
 			sportChartCount++;
 			if (sportChartCount >= sportChartMaxCount) {
 				sportChart.removeData();
 			}
 			sportChart.addData([lastHeartRate, lastSpeed], "");
-		}, 1000); // call once a second
+		}, 10000); // call once every 10 seconds
 	} else {
 		tizen.power.release('CPU');
 		

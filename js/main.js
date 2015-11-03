@@ -92,20 +92,17 @@ function updateHeartRate(hrmInfo)  {
 		if (hrmInfo.heartRate < 103.95) {
 			elem_outter.style.color = '';
 			if (oldHeartRate >= 103.95) {
-				// Will not work if screen isn't on
-				// navigator.vibrate(2000);
+				navigator.vibrate(2000);
 			}
 		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
 			elem_outter.style.color = 'lime';
 			if (oldHeartRate < 103.95 || oldHeartRate > 132.3) {
-				// Will not work if screen isn't on
-				// navigator.vibrate(2000);
+				navigator.vibrate(2000);
 			}
 		} else {
 			elem_outter.style.color = 'red';
 			if (oldHeartRate <= 132.3) {
-				// Will not work if screen isn't on
-				// navigator.vibrate(2000);
+				navigator.vibrate(2000);
 			}
 		}
 		
@@ -211,7 +208,7 @@ function sportSwitched() {
 			
 			sportChart.addData([lastHeartRate, lastSpeed], '');
 			sportChartCount++;
-		}, 1000); // call once every 10 seconds
+		}, 10000); // call once every 10 seconds
 	} else {
 		tizen.power.release('CPU');
 		

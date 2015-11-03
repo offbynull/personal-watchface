@@ -78,7 +78,6 @@ function updateHeartRate(hrmInfo)  {
 		hrmFailCount++;
 		 
 		elem.textContent = SPINNER[hrmFailCount % SPINNER.length];
-		lastHeartRate = hrmInfo.heartRate;
 		if (hrmFailCount % 200 == 0) {
 			// If you get 201 0's in a row, the sensor gives up. Close it and re-open it to try again.
 			tizen.humanactivitymonitor.stop('HRM');
@@ -86,6 +85,7 @@ function updateHeartRate(hrmInfo)  {
 		}
 		
 		elem_outter.style.color = '';
+		lastHeartRate = hrmInfo.heartRate;
 	} else if (hrmInfo.heartRate >= 0) {
 		// Heartrate numbers were taken from calculations on http://www.livestrong.com/article/208307-how-to-calculate-heart-rate-for-fat-burn/
 		// Adjusted for 31 yearold individual
@@ -114,9 +114,11 @@ function updateHeartRate(hrmInfo)  {
 	} else if (hrmInfo.heartRate == -3){
 		elem.textContent = 'OFF';
 		elem_outter.style.color = '';
+		lastHeartRate = 0;
 	} else if (hrmInfo.heartRate == -2){
 		elem.textContent = 'SHK';
 		elem_outter.style.color = '';
+		lastHeartRate = 0;
 	}
 	
 	oldHeartRate = hrmInfo.heartRate;
@@ -128,14 +130,16 @@ function updatePedometer(pedometerInfo) {
 
 	if (pedometerInfo.stepStatus == 'WALKING') {
 		elem_outter.style.color = 'lime';
+		lastSpeed = pedometerInfo.speed;
 	} else if (pedometerInfo.stepStatus == 'NOT_MOVING') {
 		elem_outter.style.color = '';
+		lastSpeed = 0;
 	} else {
 		elem_outter.style.color = 'yellow';
+		lastSpeed = pedometerInfo.speed;
 	}
 	
 	elem.textContent = pedometerInfo.speed;
-	lastSpeed = pedometerInfo.speed;
 }
 
 function timerSwitched() {
@@ -154,6 +158,9 @@ function sportSwitched() {
 	if(checkbox.checked === true) {
 		tizen.power.request('CPU', 'CPU_AWAKE');
 
+		lastHeartRate = 0;
+		lastSpeed = 0;
+		
 		sportChartMaxCount = 60 * 60 / 10; // number of seconds in an hour / 10
 		sportChartCount = 60 * 60 / 10; // pretend like we've got a full count of points, because initial points is array of maxCount 0s
 		
@@ -164,13 +171,13 @@ function sportSwitched() {
 			        {
 			            label: 'HRM',
 			            fillColor: 'rgba(220,220,220,0.2)',
-			            strokeColor: "rgba(220,220,220,1)",
+			            strokeColor: "rgba(220,220,220,0.6)",
 			            data: Array.apply(null, new Array(sportChartMaxCount)).map(Number.prototype.valueOf, 0),
 			        },
 			        {
 			            label: 'Speed',
 			            fillColor: 'rgba(151,187,205,0.2)',
-			            strokeColor: "rgba(151,187,205,1)",
+			            strokeColor: "rgba(151,187,205,0.6)",
 			            data: Array.apply(null, new Array(sportChartMaxCount)).map(Number.prototype.valueOf, 0),
 			        }
 			    ]
@@ -216,9 +223,6 @@ function sportSwitched() {
 
 function init() {
 	battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
-	
-	lastHeartRate = 0;
-	lastSpeed = 0;
 	
 	document.addEventListener('visibilitychange', function() {
 	    if (document.hidden) {

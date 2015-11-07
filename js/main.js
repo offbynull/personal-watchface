@@ -93,25 +93,19 @@ function updateHeartRate(hrmInfo)  {
 			elem_outter.style.color = '';
 			if (oldHeartRate >= 103.95) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
-				tizen.power.request('SCREEN', 'SCREEN_NORMAL');
-				navigator.vibrate(2000);
-				tizen.power.release('SCREEN');
+				turnOnAndVibrate();
 			}
 		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
 			elem_outter.style.color = 'lime';
 			if (oldHeartRate < 103.95 || oldHeartRate > 132.3) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
-				tizen.power.request('SCREEN', 'SCREEN_NORMAL');
-				navigator.vibrate(2000);
-				tizen.power.release('SCREEN');
+				turnOnAndVibrate();
 			}
 		} else {
 			elem_outter.style.color = 'red';
 			if (oldHeartRate <= 132.3) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
-				tizen.power.request('SCREEN', 'SCREEN_NORMAL');
-				navigator.vibrate(2000);
-				tizen.power.release('SCREEN');
+				turnOnAndVibrate();
 			}
 		}
 		
@@ -128,6 +122,11 @@ function updateHeartRate(hrmInfo)  {
 	}
 	
 	oldHeartRate = hrmInfo.heartRate;
+}
+
+function turnOnAndVibrate() {
+	tizen.power.turnScreenOn(); // turn screen on, or else vibrate won't work
+	navigator.vibrate(2000);
 }
 
 function updatePedometer(pedometerInfo) {

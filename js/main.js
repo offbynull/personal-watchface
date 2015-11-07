@@ -92,17 +92,26 @@ function updateHeartRate(hrmInfo)  {
 		if (hrmInfo.heartRate < 103.95) {
 			elem_outter.style.color = '';
 			if (oldHeartRate >= 103.95) {
+				// Vibrate won't work if the screen is off, so temporarily turn it on
+				tizen.power.request('SCREEN', 'SCREEN_NORMAL');
 				navigator.vibrate(2000);
+				tizen.power.release('SCREEN');
 			}
 		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
 			elem_outter.style.color = 'lime';
 			if (oldHeartRate < 103.95 || oldHeartRate > 132.3) {
+				// Vibrate won't work if the screen is off, so temporarily turn it on
+				tizen.power.request('SCREEN', 'SCREEN_NORMAL');
 				navigator.vibrate(2000);
+				tizen.power.release('SCREEN');
 			}
 		} else {
 			elem_outter.style.color = 'red';
 			if (oldHeartRate <= 132.3) {
+				// Vibrate won't work if the screen is off, so temporarily turn it on
+				tizen.power.request('SCREEN', 'SCREEN_NORMAL');
 				navigator.vibrate(2000);
+				tizen.power.release('SCREEN');
 			}
 		}
 		
@@ -206,7 +215,7 @@ function sportSwitched() {
 				sportChartCount--;
 			}
 			
-			sportChart.addData([lastHeartRate, lastSpeed], '');
+			sportChart.addData([lastHeartRate, lastSpeed * 10], '');
 			sportChartCount++;
 		}, 10000); // call once every 10 seconds
 	} else {

@@ -84,7 +84,15 @@ h1 {
 	width: 100%;
 }
 
-.watch_text {
+.date_text {
+	font-family: 'Orbitron';
+	font-size: 16px;
+	color: white;
+	text-align: center;
+	width: 100%;
+}
+
+.time_text {
 	font-family: 'Orbitron';
 	font-size: 42px;
 	color: white;

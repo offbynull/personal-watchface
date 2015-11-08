@@ -15,18 +15,20 @@
  */
 
 function updateTime() {
-	var h, m, s;
+	var d, h, m, s;
+	var now = new Date();
 	
 	if (typeof timerStartDate !== 'undefined') {
-		var timeDiff = Math.abs(new Date().getTime() - timerStartDate.getTime());
+		var timeDiff = Math.abs(now.getTime() - timerStartDate.getTime());
 		s = Math.floor(timeDiff / 1000) % 60;
 		m = Math.floor(timeDiff / 1000 / 60) % 60;
 		h = Math.floor(timeDiff / 1000 / 60 / 60) % 24;
+		d = '';
 	} else {
-	    var today = new Date();
-	    h = today.getHours();
-	    m = today.getMinutes();
-	    s = today.getSeconds();
+	    h = now.getHours();
+	    m = now.getMinutes();
+	    s = now.getSeconds();
+	    d = dateFormat(now, "ddd, mmm d yyyy");
 	}
     
     var padTimeElement = function padTimeElement(i) {
@@ -39,7 +41,9 @@ function updateTime() {
     h = padTimeElement(h);
     m = padTimeElement(m);
     s = padTimeElement(s);
+    
     document.querySelector('#time').textContent = h + ':' + m + ':' + s;
+    document.querySelector('#date').textContent = d;
 }
 
 function updateBatteryState()  {

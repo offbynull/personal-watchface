@@ -28,6 +28,8 @@ limitations under the License.
 <script src="js/dateformat.js"></script>
 <script src="js/chart.min.js"></script>
 <script src="js/rss.js"></script>
+<script src="js/weather_chart.js"></script>
+<script src="js/sport_chart.js"></script>
 <script src="js/main.js"></script>
 
 
@@ -38,8 +40,9 @@ limitations under the License.
 <body onload="init()">
 	<div class="fill_outter">
 		<div class="fill_inner">
-			<div class="fill_inner_inner">
-				<canvas id="sport_chart"></canvas>
+			<canvas class="graph" id="sport_chart"></canvas>
+			<canvas class="graph" id="weather_chart"></canvas>
+			<div class="fill_inner_inner" style="z-index: 1">
 				<div class="date_text" id="date"></div>
 				<div class="time_text" id="time"></div>
 				<div class="data_text" id="sensor">

@@ -126,6 +126,7 @@ function updateHeartRate(hrmInfo)  {
 	}
 	
 	oldHeartRate = hrmInfo.heartRate;
+	sport_chart.setCurrentHeartRate(hrmInfo.heartRate);
 }
 
 function turnOnAndVibrate() {
@@ -149,6 +150,7 @@ function updatePedometer(pedometerInfo) {
 	}
 	
 	elem.textContent = pedometerInfo.speed;
+	sport_chart.setCurrentSpeed(pedometerInfo.speed);
 }
 
 function timerSwitched() {
@@ -165,72 +167,24 @@ function sportSwitched() {
 
 	var checkbox = document.querySelector('#sportSwitch');
 	if(checkbox.checked === true) {
+		weather_chart.hide();
+		rss.hide();
+		sport_chart.show();
+		
 		tizen.power.request('CPU', 'CPU_AWAKE');
 
 		lastHeartRate = 0;
 		lastSpeed = 0;
-		
-		sportChartMaxCount = 60 * 60 / 10; // number of seconds in an hour / 10
-		sportChartCount = 60 * 60 / 10; // pretend like we've got a full count of points, because initial points is array of maxCount 0s
-		
-		var data = {
-			    labels: Array.apply(null, new Array(sportChartMaxCount)).map(String.prototype.valueOf, ''),
-			    labelsFilter: function (label) { return true },
-			    datasets: [
-			        {
-			            label: 'HRM',
-			            fillColor: 'rgba(220,220,220,0.2)',
-			            strokeColor: "rgba(220,220,220,0.6)",
-			            data: Array.apply(null, new Array(sportChartMaxCount)).map(Number.prototype.valueOf, 0),
-			        },
-			        {
-			            label: 'Speed',
-			            fillColor: 'rgba(151,187,205,0.2)',
-			            strokeColor: "rgba(151,187,205,0.6)",
-			            data: Array.apply(null, new Array(sportChartMaxCount)).map(Number.prototype.valueOf, 0),
-			        }
-			    ]
-			};
-		
-		var options = {
-				animation: false,
-				responsive: false,
-				maintainAspectRatio: false,
-				showTooltips: false,
-			    scaleShowGridLines : false,
-			    scaleGridLineColor : 'rgba(0,0,0,.05)',
-			    scaleGridLineWidth : 1,
-			    scaleShowHorizontalLines: false,
-			    scaleShowVerticalLines: false,
-			    bezierCurve : false,
-			    pointDot : false,
-			    datasetStroke : true,
-			    datasetStrokeWidth : 2,
-			    datasetFill : true,
-			};
-		
-		sportChart = new Chart(elem.getContext('2d')).Line(data, options);
-		
-
-		sportChartUpdater = setInterval(function() {
-			while (sportChartCount >= sportChartMaxCount) {
-				sportChart.removeData();
-				sportChartCount--;
-			}
-			
-			sportChart.addData([lastHeartRate, lastSpeed * 10], '');
-			sportChartCount++;
-		}, 10000); // call once every 10 seconds
 	} else {
-		tizen.power.release('CPU');
+		weather_chart.show();
+		rss.show();
+		sport_chart.hide();
 		
-		sportChart.clear();
-		sportChart.destroy();
-		clearInterval(sportChartUpdater);
+		tizen.power.release('CPU');
 	}
 }
 
-function init() {
+function init() {	
 	battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
 	
 	document.addEventListener('visibilitychange', function() {
@@ -245,7 +199,9 @@ function init() {
 }
 
 function activate() {
-	rssInit();
+	rss = new Rss('http://feeds.arstechnica.com/arstechnica/index/', '#news');
+	weather_chart = new WeatherChart('http://www.yr.no/place/Canada/British_Columbia/Vancouver/forecast.xml', '#weather_chart');
+	sport_chart = new SportChart('#sport_chart');
 	
 	updateTime();
 	timeUpdateTimer = setInterval(updateTime, 500);

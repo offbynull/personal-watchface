@@ -159,7 +159,7 @@ h1 {
     margin-bottom: 8px;
 }
 
-#sport_chart {
+.graph {
 	position: absolute;
 	top: 20px;
 	left: 20px;

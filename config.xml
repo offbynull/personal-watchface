@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://offbynull.com/PersonalWatchFace" version="1.0.0" viewmodes="maximized">
-    <access origin="http://feeds.arstechnica.com" subdomains="true"></access>
+    <access origin="http://feeds.arstechnica.com" subdomains="true"/>
+    <access origin="http://www.yr.no" subdomains="true"/>
     <tizen:application id="w1sFLJg1cH.PersonalWatchFace" package="w1sFLJg1cH" required_version="2.3.1" ambient_support="enable"/>
     <tizen:category name="http://tizen.org/category/wearable_clock"/>
     <content src="index.html"/>

@@ -15,114 +15,92 @@
  * limitations under the License.
  */
 
-var XML_ADDRESS = "http://feeds.arstechnica.com/arstechnica/index/",
-    XML_METHOD = "GET",
-    MSG_CONTACTING = "...",
-    MSG_ERR_NODATA = "NO_DATA",
-    MSG_ERR_BADRESPONSE = "BAS_RESPONSE",
-    MSG_ERR_NOTCONNECTED = "NO_CONN",
-    NUM_MAX_NEWS = 10,
-    NUM_MAX_LENGTH_SUBJECT = 64,
-    arrayNews = [],
-    indexDisplay = 0,
-    lengthNews = 0;
+function Rss(xmlAddress, selector) {
+	this._MSG_CONTACTING = "...";
+	this._MSG_ERR_NODATA = "NO_DATA";
+	this._MSG_ERR_BADRESPONSE = "BAD_RESPONSE";
+	this._MSG_ERR_NOTCONNECTED = "NO_CONN";
+	this._indexDisplay = 0;
+	this._lengthNews = 0;
 
-function trimText(text, maxLength) {
-    var trimmedString;
+	this.hide = function() {
+		this._elem.style.display = 'none';
+	}
+	
+	this.show = function() {
+		this._elem.style.display = 'block';
+	}
 
-    if (text.length > maxLength) {
-        trimmedString = text.substring(0, maxLength - 3) + "...";
-    } else {
-        trimmedString = text;
-    }
-
-    return trimmedString;
-}
-
-function resetNewsIndex() {
-    indexDisplay = 0;
-}
-
-function clearElmText(objElm) {
-    objElm.textContent = '';
-}
-
-function addElmText(objElm, textClass, textContent) {
-    objElm.textContent = textContent;
-}
-
-function setNews(index) {
-    var objNews = document.querySelector('#news');
-
-    addElmText(objNews, 'subject', arrayNews[index].title);
-}
-
-function showNews() {
-    setNews(indexDisplay);
-}
-
-function showNextNews() {
-    if (lengthNews > 0) {
-        indexDisplay = (indexDisplay + 1) % lengthNews;
-        showNews();
-    }
-}
-
-function setDefaultEvents() {
-	document.querySelector('#news').addEventListener('click', showNextNews);
-}
-
-function getDataFromXML() {
-    var xmlhttp,
-        xmlDoc,
-        dataItem,
-        objNews = document.querySelector('#news'),
-        i;
-
-    arrayNews = [];
-    lengthNews = 0;
-    clearElmText(objNews);
-    addElmText(objNews, 'subject', MSG_CONTACTING);
-    xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.open(XML_METHOD, XML_ADDRESS, true);
-    xmlhttp.onload = function() {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            clearElmText(objNews);
-
-            xmlDoc = xmlhttp.responseXML;
-            dataItem = xmlDoc.getElementsByTagName('item');
-
-            if (dataItem.length > 0) {
-                lengthNews = (dataItem.length > NUM_MAX_NEWS) ? NUM_MAX_NEWS : dataItem.length;
-                for (i = 0; i < lengthNews; i++) {
-                    arrayNews.push({
-                        title: dataItem[i].getElementsByTagName('title')[0].childNodes[0].nodeValue,
-                        link: dataItem[i].getElementsByTagName('link')[0].childNodes[0].nodeValue
-                    });
-                    arrayNews[i].title = trimText(arrayNews[i].title, NUM_MAX_LENGTH_SUBJECT);
-                }
-                resetNewsIndex();
-                showNews();
-            } else {
-                addElmText(objNews, 'subject', MSG_ERR_NODATA);
-            }
-
-            xmlhttp = null;
-        } else {
-        	addElmText(objNews, 'subject', MSG_ERR_BADRESPONSE);
-        }
-    };
-    
-    xmlhttp.onerror = function () {
-    	addElmText(objNews, 'subject', MSG_ERR_NOTCONNECTED);
-    }
-
-    xmlhttp.send();
-}
-
-function rssInit() {
-    setDefaultEvents();
-
-    getDataFromXML();
+	this._trimText = function(text) {
+	    var trimmedString;
+	    var maxLength = 64;
+	
+	    if (text.length > maxLength) {
+	        trimmedString = text.substring(0, maxLength - 3) + "...";
+	    } else {
+	        trimmedString = text;
+	    }
+	
+	    return trimmedString;
+	}
+	
+	this._setDefaultEvents = function() {
+		var thisObj = this;
+		this._elem.addEventListener('click', function() {
+			if (thisObj._lengthNews > 0) {
+				thisObj._indexDisplay = (thisObj._indexDisplay + 1) % thisObj._lengthNews;
+				thisObj._elem.textContent = thisObj._arrayNews[thisObj._indexDisplay];
+		    }
+		});
+	}
+	
+	this._getDataFromXML = function() {
+		this._arrayNews = [];
+		this._lengthNews = 0;
+		this._elem.textContent = this._MSG_CONTACTING;
+		var thisObj = this;
+	    var xmlHttp = new XMLHttpRequest();
+	
+	    xmlHttp.open("GET", this._xmlAddress, true);
+	    xmlHttp.onload = function() {
+	        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+	        	thisObj._elem.textContent = '';
+	
+	            var xmlDoc = xmlHttp.responseXML;
+	            var dataItem = xmlDoc.getElementsByTagName('item');
+	            
+	            var maxNewsItems = 10;
+	
+	            if (dataItem.length > 0) {
+	            	thisObj._lengthNews = (dataItem.length > maxNewsItems) ? maxNewsItems : dataItem.length;
+	                for (var i = 0; i < thisObj._lengthNews; i++) {
+	                	var title = dataItem[i].getElementsByTagName('title')[0].childNodes[0].nodeValue;
+	                	var trimmedTitle = thisObj._trimText(title);
+	                	thisObj._arrayNews.push(trimmedTitle);
+	                }
+	                thisObj._indexDisplay = 0;
+	                thisObj._elem.textContent = thisObj._arrayNews[0];
+	            } else {
+	            	thisObj._elem.textContent = thisObj._MSG_ERR_NODATA;
+	            }
+	
+	            xmlHttp = null;
+	        } else {
+	        	thisObj._elem.textContent = this._MSG_ERR_BADRESPONSE;
+	        }
+	    };
+	    
+	    xmlHttp.onerror = function () {
+	    	thisObj._elem.textContent = this._MSG_ERR_NOTCONNECTED;
+	    }
+	
+	    xmlHttp.send();
+	}
+	
+	
+	this._xmlAddress = xmlAddress;
+	this._elem = document.querySelector(selector);
+	
+    this._setDefaultEvents();
+    this._getDataFromXML();
 }

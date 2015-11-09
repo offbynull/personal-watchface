@@ -13,7 +13,7 @@ In sport mode, this watchface will ...
 1. change both the heart rate icon and the speed icon change color depending on your level of activity.
 1. vibrate to notify you when your heartrate reaches certain thresholds.
 
-** Normal mode**
+**Normal mode**
 
 In normal mode, the watchface will ...
 1. measure your heartrate and speed (via the pedometer) so long as the screen is on.

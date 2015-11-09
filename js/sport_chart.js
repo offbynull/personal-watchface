@@ -23,21 +23,9 @@ function SportChart(selector) {
 		this._speed = val;
 	}
 	
-	this._plot = function() {
-		while (this._sportChartCount >= this._sportChartMaxCount) {
-			this._sportChart.removeData();
-			this._sportChartCount--;
-		}
-		
-		this._sportChart.addData([this._heartRate, this._speed * 10], '');
-		this._sportChartCount++;
-	}
-	
 	this.hide = function() {
 		this._sportChart.clear();
 		this._sportChart.destroy();
-		
-		this._elem.style.display = 'none';
 		
 		clearInterval(this._sportChartUpdater);
 	}
@@ -86,11 +74,16 @@ function SportChart(selector) {
 			};
 		
 		this._sportChart = new Chart(this._elem.getContext('2d')).Line(data, options);
-		this._elem.style.display = 'block';
 		
 		var thisObj = this;
 		this._sportChartUpdater = setInterval(function() {
-			thisObj._plot();
+			while (thisObj._sportChartCount >= thisObj._sportChartMaxCount) {
+				thisObj._sportChart.removeData();
+				thisObj._sportChartCount--;
+			}
+			
+			thisObj._sportChart.addData([thisObj._heartRate, thisObj._speed * 10], '');
+			thisObj._sportChartCount++;
 		}, 10000); // call once every 10 seconds
 	}
 	

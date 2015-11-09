@@ -19,6 +19,8 @@ function WeatherChart(xmlAddress, selector) {
 	this.HEAVY_RAIN = 7.6; // anything below this or above (in mm) is considered heavy rain
 	// inbetween is considered moderate rain
 	
+	this.ROOM_TEMP = 21; // room temp in celsius
+	
 	this._getDataFromXML = function() {
 	    var xmlHttp = new XMLHttpRequest();
 	    var thisObj = this;
@@ -46,7 +48,7 @@ function WeatherChart(xmlAddress, selector) {
 	            	var temp = timeItem[i].getElementsByTagName('temperature')[0].attributes['value'].value;
 	            	var percip = timeItem[i].getElementsByTagName('precipitation')[0].attributes['value'].value;
 	            	
-	            	thisObj._weatherChart.addData([temp, percip, thisObj.LIGHT_RAIN, thisObj.HEAVY_RAIN], label);
+	            	thisObj._weatherChart.addData([temp, percip, thisObj.LIGHT_RAIN, thisObj.HEAVY_RAIN, thisObj.ROOM_TEMP], label);
 	            }
 	
 	            xmlHttp = null;
@@ -59,68 +61,69 @@ function WeatherChart(xmlAddress, selector) {
 	this.hide = function() {
 		this._weatherChart.clear();
 		this._weatherChart.destroy();
-		
-		this._elem.style.display = 'none';
 	}
 	
 	this.show = function() {
-		this._elem.style.display = 'block';
+		var data = {
+			    labels:[],
+			    labelsFilter: function (label) { return true },
+			    datasets: [
+			        {
+			            label: 'Temperature',
+			            fillColor: 'rgba(255,0,0,0.0)',
+			            strokeColor: "rgba(255,0,0,1)",
+			            data: []
+			        },
+			        {
+			            label: 'Precipitation',
+			            fillColor: 'rgba(0,0,255,0.0)',
+			            strokeColor: "rgba(0,0,255,1)",
+			            data: []
+			        },
+			        {
+			            label: 'Light Rain',
+			            fillColor: 'rgba(255,255,255,0.0)',
+			            strokeColor: "rgba(0,0,255,0.4)",
+			            data: []
+			        },
+			        {
+			            label: 'Heavy Rain',
+			            fillColor: 'rgba(255,255,255,0.0)',
+			            strokeColor: "rgba(0,0,255,0.4)",
+			            data: []
+			        },
+			        {
+			            label: 'Room Temp',
+			            fillColor: 'rgba(255,255,255,0.0)',
+			            strokeColor: "rgba(255,0,0,0.4)",
+			            data: []
+			        }
+			    ]
+			};
+		
+		var options = {
+				animation: false,
+				responsive: false,
+				maintainAspectRatio: false,
+				showTooltips: false,
+			    scaleShowGridLines : false,
+			    scaleGridLineColor : 'rgba(0,0,0,.05)',
+			    scaleGridLineWidth : 1,
+			    scaleShowHorizontalLines: false,
+			    scaleShowVerticalLines: false,
+			    bezierCurve : true,
+			    pointDot : false,
+			    datasetStroke : true,
+			    datasetStrokeWidth : 2,
+			    datasetFill : true,
+			};
+		
+		this._weatherChart = new Chart(this._elem.getContext('2d')).Line(data, options);
+		
 		this._getDataFromXML();
 	}
 	
 	
 	this._xmlAddress = xmlAddress;
-	
-	var data = {
-		    labels:[],
-		    labelsFilter: function (label) { return true },
-		    datasets: [
-		        {
-		            label: 'Temperature',
-		            fillColor: 'rgba(255,0,0,0.0)',
-		            strokeColor: "rgba(255,0,0,1)",
-		            data: []
-		        },
-		        {
-		            label: 'Precipitation',
-		            fillColor: 'rgba(0,0,255,0.0)',
-		            strokeColor: "rgba(0,0,255,1)",
-		            data: []
-		        },
-		        {
-		            label: 'Light Rain',
-		            fillColor: 'rgba(255,255,255,0.0)',
-		            strokeColor: "rgba(0,0,255,0.4)",
-		            data: []
-		        },
-		        {
-		            label: 'Heavy Rain',
-		            fillColor: 'rgba(255,255,255,0.0)',
-		            strokeColor: "rgba(0,0,255,0.4)",
-		            data: []
-		        }
-		    ]
-		};
-	
-	var options = {
-			animation: false,
-			responsive: false,
-			maintainAspectRatio: false,
-			showTooltips: false,
-		    scaleShowGridLines : false,
-		    scaleGridLineColor : 'rgba(0,0,0,.05)',
-		    scaleGridLineWidth : 1,
-		    scaleShowHorizontalLines: false,
-		    scaleShowVerticalLines: false,
-		    bezierCurve : true,
-		    pointDot : false,
-		    datasetStroke : true,
-		    datasetStrokeWidth : 2,
-		    datasetFill : true,
-		};
-	
 	this._elem = document.querySelector(selector);
-	this._weatherChart = new Chart(this._elem.getContext('2d')).Line(data, options);
-
-	this._getDataFromXML();
 }

@@ -50,7 +50,7 @@ function updateBatteryState()  {
 	var elem = document.querySelector('#battery_level');
 	var elem_icon = document.querySelector('#battery_icon');
 	var elem_outter = document.querySelector('#battery');
-   
+    
 	var level = Math.floor(battery.level * 100);
 	elem.textContent = Math.floor(battery.level * 100);
 	
@@ -95,19 +95,19 @@ function updateHeartRate(hrmInfo)  {
 		// Adjusted for 31 yearold individual
 		if (hrmInfo.heartRate < 103.95) {
 			elem_outter.style.color = '';
-			if (oldHeartRate >= 103.95) {
+			if (lastHeartRate >= 103.95) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
 				turnOnAndVibrate();
 			}
 		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
 			elem_outter.style.color = 'lime';
-			if (oldHeartRate < 103.95 || oldHeartRate > 132.3) {
+			if (lastHeartRate < 103.95 || lastHeartRate > 132.3) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
 				turnOnAndVibrate();
 			}
 		} else {
 			elem_outter.style.color = 'red';
-			if (oldHeartRate <= 132.3) {
+			if (lastHeartRate <= 132.3) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
 				turnOnAndVibrate();
 			}
@@ -125,8 +125,7 @@ function updateHeartRate(hrmInfo)  {
 		lastHeartRate = 0;
 	}
 	
-	oldHeartRate = hrmInfo.heartRate;
-	sport_chart.setCurrentHeartRate(hrmInfo.heartRate);
+	sport_chart.setCurrentHeartRate(lastHeartRate);
 }
 
 function turnOnAndVibrate() {
@@ -187,6 +186,11 @@ function sportSwitched() {
 function init() {	
 	battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
 	
+	weather_chart = new WeatherChart('http://www.yr.no/place/Canada/British_Columbia/Vancouver/forecast.xml', '#weather_chart');
+	sport_chart = new SportChart('#sport_chart');
+	
+	weather_chart.show();
+	
 	document.addEventListener('visibilitychange', function() {
 	    if (document.hidden) {
 	    	deactivate();
@@ -200,8 +204,6 @@ function init() {
 
 function activate() {
 	rss = new Rss('http://feeds.arstechnica.com/arstechnica/index/', '#news');
-	weather_chart = new WeatherChart('http://www.yr.no/place/Canada/British_Columbia/Vancouver/forecast.xml', '#weather_chart');
-	sport_chart = new SportChart('#sport_chart');
 	
 	updateTime();
 	timeUpdateTimer = setInterval(updateTime, 500);
@@ -211,7 +213,6 @@ function activate() {
 		document.querySelector('#pedometer_level').textContent = '-';
 		document.querySelector('#heartrate').style.color = '';
 		document.querySelector('#heartrate_level').textContent = '-';
-		oldHeartRate = 0;
 		hrmFailCount = 0;
 		tizen.humanactivitymonitor.start('HRM', updateHeartRate);
 		tizen.humanactivitymonitor.setAccumulativePedometerListener(updatePedometer);

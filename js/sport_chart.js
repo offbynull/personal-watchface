@@ -43,14 +43,14 @@ function SportChart(selector) {
 			    datasets: [
 			        {
 			            label: 'HRM',
-			            fillColor: 'rgba(220,220,220,0)',
-			            strokeColor: "rgba(220,220,220,1)",
+			            fillColor: 'rgba(220,220,220,0.2)',
+			            strokeColor: "rgba(220,220,220,0.6)",
 			            data: Array.apply(null, new Array(this._sportChartMaxCount)).map(Number.prototype.valueOf, 0),
 			        },
 			        {
 			            label: 'Speed',
-			            fillColor: 'rgba(151,187,205,0)',
-			            strokeColor: "rgba(151,187,205,1)",
+			            fillColor: 'rgba(151,187,205,0.2)',
+			            strokeColor: "rgba(151,187,205,0.6)",
 			            data: Array.apply(null, new Array(this._sportChartMaxCount)).map(Number.prototype.valueOf, 0),
 			        }
 			    ]

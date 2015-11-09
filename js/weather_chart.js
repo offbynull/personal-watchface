@@ -57,11 +57,15 @@ function WeatherChart(xmlAddress, selector) {
 	}
 	
 	this.hide = function() {
+		this._weatherChart.clear();
+		this._weatherChart.destroy();
+		
 		this._elem.style.display = 'none';
 	}
 	
 	this.show = function() {
 		this._elem.style.display = 'block';
+		this._getDataFromXML();
 	}
 	
 	
@@ -117,6 +121,6 @@ function WeatherChart(xmlAddress, selector) {
 	
 	this._elem = document.querySelector(selector);
 	this._weatherChart = new Chart(this._elem.getContext('2d')).Line(data, options);
-	
-    this._getDataFromXML();
+
+	this._getDataFromXML();
 }

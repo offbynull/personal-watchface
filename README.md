@@ -20,7 +20,7 @@ In normal mode, the watchface will ...
 
 1. measure your heartrate and speed (via the pedometer) so long as the screen is on.
 1. query for the newest articles on Ars Technica each time the screen is turned on (tap on the current headline to view the next headline).
-1. graph the temperature and precipitation forecast for the next few days (only in Vancouver, BC).
+1. graph the temperature and precipitation forecast for the next few days (Vancouver, BC).
 
 **Timer**
 

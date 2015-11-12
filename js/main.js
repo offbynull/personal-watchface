@@ -93,21 +93,21 @@ function updateHeartRate(hrmInfo)  {
 	} else if (hrmInfo.heartRate >= 0) {
 		// Heartrate numbers were taken from calculations on http://www.livestrong.com/article/208307-how-to-calculate-heart-rate-for-fat-burn/
 		// Adjusted for 31 yearold individual
-		if (hrmInfo.heartRate < 103.95) {
+		if (hrmInfo.heartRate < sport_chart.MIN_GOOD_HEART_RATE) {
 			elem_outter.style.color = '';
-			if (lastHeartRate >= 103.95) {
+			if (lastHeartRate >= sport_chart.MIN_GOOD_HEART_RATE) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
 				turnOnAndVibrate();
 			}
-		} else if (hrmInfo.heartRate >= 103.95 && hrmInfo.heartRate <= 132.3) {
+		} else if (hrmInfo.heartRate >= sport_chart.MIN_GOOD_HEART_RATE && hrmInfo.heartRate <= sport_chart.MAX_GOOD_HEART_RATE) {
 			elem_outter.style.color = 'lime';
-			if (lastHeartRate < 103.95 || lastHeartRate > 132.3) {
+			if (lastHeartRate < sport_chart.MIN_GOOD_HEART_RATE || lastHeartRate > sport_chart.MAX_GOOD_HEART_RATE) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
 				turnOnAndVibrate();
 			}
 		} else {
 			elem_outter.style.color = 'red';
-			if (lastHeartRate <= 132.3) {
+			if (lastHeartRate <= sport_chart.MAX_GOOD_HEART_RATE) {
 				// Vibrate won't work if the screen is off, so temporarily turn it on
 				turnOnAndVibrate();
 			}

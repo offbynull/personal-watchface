@@ -15,6 +15,11 @@
  */
 
 function SportChart(selector) {
+	// Heartrate numbers were taken from calculations on http://www.livestrong.com/article/208307-how-to-calculate-heart-rate-for-fat-burn/
+	// Adjusted for 31 yearold individual
+	this.MIN_GOOD_HEART_RATE = 103.95;
+	this.MAX_GOOD_HEART_RATE = 132.3;
+	
 	this.setCurrentHeartRate = function(val) {
 		this._heartRate = val;
 	}
@@ -43,9 +48,21 @@ function SportChart(selector) {
 			    datasets: [
 			        {
 			            label: 'HRM',
-			            fillColor: 'rgba(220,220,220,0.2)',
-			            strokeColor: "rgba(220,220,220,0.6)",
+			            fillColor: 'rgba(255,255,255,0.2)',
+			            strokeColor: "rgba(255,255,255,0.6)",
 			            data: Array.apply(null, new Array(this._sportChartMaxCount)).map(Number.prototype.valueOf, 0),
+			        },
+			        {
+			            label: 'MIN_GOOD_HRM',
+			            fillColor: 'rgba(255,255,255,0)',
+			            strokeColor: "rgba(255,255,255,0.2)",
+			            data: Array.apply(null, new Array(this._sportChartMaxCount)).map(Number.prototype.valueOf, this.MIN_GOOD_HEART_RATE),
+			        },
+			        {
+			            label: 'MAX_GOOD_HRM',
+			            fillColor: 'rgba(255,255,255,0)',
+			            strokeColor: "rgba(255,255,255,0.2)",
+			            data: Array.apply(null, new Array(this._sportChartMaxCount)).map(Number.prototype.valueOf, this.MAX_GOOD_HEART_RATE),
 			        },
 			        {
 			            label: 'Speed',
@@ -82,7 +99,7 @@ function SportChart(selector) {
 				thisObj._sportChartCount--;
 			}
 			
-			thisObj._sportChart.addData([thisObj._heartRate, thisObj._speed * 10], '');
+			thisObj._sportChart.addData([thisObj._heartRate, thisObj.MIN_GOOD_HEART_RATE, thisObj.MAX_GOOD_HEART_RATE, thisObj._speed * 10], '');
 			thisObj._sportChartCount++;
 		}, 10000); // call once every 10 seconds
 	}

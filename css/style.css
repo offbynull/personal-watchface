@@ -104,7 +104,7 @@ h1 {
 	width: 100%;
 }
 
-.counter_text .data_item {
+.counter_text .data_button {
 	display: inline-block;
 	text-align: center;
 	
@@ -130,6 +130,24 @@ h1 {
 	text-decoration: none;
 	
 	opacity: 0.4;
+}
+
+.counter_text .data_item {
+	display: inline-block;
+	text-align: center;
+	
+	width: 30%;
+	
+	cursor: pointer;
+	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+
+	font-family: 'Orbitron';
+	font-size: 28px;
+	font-weight: bold;
+	color: #ffffff;
 }
 
 .counter_text .data_item:first-child {

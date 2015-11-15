@@ -186,10 +186,9 @@ function sportSwitched() {
 function init() {	
 	battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
 	
+	rss = new Rss('http://feeds.arstechnica.com/arstechnica/index/', '#news');
 	weather_chart = new WeatherChart('http://www.yr.no/place/Canada/British_Columbia/Vancouver/forecast.xml', '#weather_chart');
 	sport_chart = new SportChart('#sport_chart');
-	
-	weather_chart.show();
 	
 	document.addEventListener('visibilitychange', function() {
 	    if (document.hidden) {
@@ -203,8 +202,6 @@ function init() {
 }
 
 function activate() {
-	rss = new Rss('http://feeds.arstechnica.com/arstechnica/index/', '#news');
-	
 	updateTime();
 	timeUpdateTimer = setInterval(updateTime, 500);
 	
@@ -213,6 +210,10 @@ function activate() {
 		document.querySelector('#pedometer_level').textContent = '-';
 		document.querySelector('#heartrate').style.color = '';
 		document.querySelector('#heartrate_level').textContent = '-';
+
+		rss.show();
+		weather_chart.show();
+
 		hrmFailCount = 0;
 		tizen.humanactivitymonitor.start('HRM', updateHeartRate);
 		tizen.humanactivitymonitor.setAccumulativePedometerListener(updatePedometer);
@@ -228,6 +229,9 @@ function deactivate() {
 	clearInterval(timeUpdateTimer);
 
 	if (document.querySelector('#sportSwitch').checked === false) {
+		rss.hide();
+		weather_chart.hide();
+
 		tizen.humanactivitymonitor.stop('HRM');
 		tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
 	}

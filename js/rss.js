@@ -28,6 +28,12 @@ function Rss(xmlAddress, selector) {
 	}
 	
 	this.show = function() {
+		this._indexDisplay = 0;
+		this._lengthNews = 0;
+		
+	    this._setDefaultEvents();
+	    this._getDataFromXML();
+	    
 		this._elem.style.display = 'block';
 	}
 
@@ -86,12 +92,12 @@ function Rss(xmlAddress, selector) {
 	
 	            xmlHttp = null;
 	        } else {
-	        	thisObj._elem.textContent = this._MSG_ERR_BADRESPONSE;
+	        	thisObj._elem.textContent = thisObj._MSG_ERR_BADRESPONSE;
 	        }
 	    };
 	    
 	    xmlHttp.onerror = function () {
-	    	thisObj._elem.textContent = this._MSG_ERR_NOTCONNECTED;
+	    	thisObj._elem.textContent = thisObj._MSG_ERR_NOTCONNECTED;
 	    }
 	
 	    xmlHttp.send();
@@ -100,7 +106,4 @@ function Rss(xmlAddress, selector) {
 	
 	this._xmlAddress = xmlAddress;
 	this._elem = document.querySelector(selector);
-	
-    this._setDefaultEvents();
-    this._getDataFromXML();
 }

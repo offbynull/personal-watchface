@@ -163,12 +163,16 @@ function timerSwitched() {
 
 function sportSwitched() {
 	var elem = document.querySelector('#sport_chart');
+	var countersElem = document.querySelector('#counters');
 
 	var checkbox = document.querySelector('#sportSwitch');
 	if(checkbox.checked === true) {
 		weather_chart.hide();
 		rss.hide();
 		sport_chart.show();
+		
+		document.querySelector('#counters').style.display = 'block';
+		zeroCounter();
 		
 		tizen.power.request('CPU', 'CPU_AWAKE');
 
@@ -179,8 +183,29 @@ function sportSwitched() {
 		rss.show();
 		sport_chart.hide();
 		
+		document.querySelector('#counters').style.display = 'none';
+		
 		tizen.power.release('CPU');
 	}
+}
+
+function incrementCounter() {
+	document.querySelector('#number').textContent++;
+}
+
+
+function decrementCounter() {
+	var num = document.querySelector('#number').textContent;
+	if (num == 0) {
+		return;
+	}
+	num--;
+	document.querySelector('#number').textContent = num;
+}
+
+
+function zeroCounter() {
+	document.querySelector('#number').textContent = '0';
 }
 
 function init() {	
@@ -189,6 +214,8 @@ function init() {
 	rss = new Rss('http://feeds.arstechnica.com/arstechnica/index/', '#news');
 	weather_chart = new WeatherChart('http://www.yr.no/place/Canada/British_Columbia/Vancouver/forecast.xml', '#weather_chart');
 	sport_chart = new SportChart('#sport_chart');
+	
+	document.querySelector('#counters').style.display = 'none';
 	
 	document.addEventListener('visibilitychange', function() {
 	    if (document.hidden) {

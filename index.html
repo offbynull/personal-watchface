@@ -43,6 +43,11 @@ limitations under the License.
 			<canvas class="graph" id="sport_chart"></canvas>
 			<canvas class="graph" id="weather_chart"></canvas>
 			<div class="fill_inner_inner" style="z-index: 1">
+				<div class="counter_text" id="counters">
+					<div class="data_item" onclick='decrementCounter()'>-</div>
+					<div class="data_item" id="number"  onclick='zeroCounter()'></div>
+					<div class="data_item" onclick='incrementCounter()'>+</div>
+				</div>
 				<div class="date_text" id="date"></div>
 				<div class="time_text" id="time"></div>
 				<div class="data_text" id="sensor">

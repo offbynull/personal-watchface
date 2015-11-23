@@ -30,9 +30,28 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['MainService', '$scope', func
 		$scope.time = data.nowObj.hour + ':' + data.nowObj.minute + ':' + data.nowObj.second;
 		$scope.date = data.nowObj.date;
 	});
-	
+
+	$scope.batteryStyle = '';
+	$scope.batteryIconClass = 'fa fa-battery-4';
 	$scope.$on('main:batteryChanged', function(event, data) {
 		$scope.battery = data;
+		
+		if (level <= 20) {
+			$scope.batteryStyle = 'red';
+			$scope.batteryIconClass = 'fa fa-battery-0';
+		} else if (level <= 40) { 
+			$scope.batteryStyle = 'yellow';
+			$scope.batteryIconClass = 'fa fa-battery-1';
+		} else if (level <= 60) {
+			$scope.batteryStyle = '';
+			$scope.batteryIconClass = 'fa fa-battery-2';
+		} else if (level < 80) {
+			$scope.batteryStyle = '';
+			$scope.batteryIconClass = 'fa fa-battery-3';
+		} else {
+			$scope.batteryStyle = '';
+			$scope.batteryIconClass = 'fa fa-battery-4';
+		}
 	});
 	
 	$scope.$on('main:heartRateChanged', function(event, data) {

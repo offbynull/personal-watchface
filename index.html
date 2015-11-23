@@ -54,11 +54,11 @@ limitations under the License.
 					<i class="fa fa-heartbeat"></i><br>
 					<span ng-bind="heartrate"></span><span class='small_text'>bpm</span>
 				</div>
-				<div class="data_item" id="battery">
-					<i id="battery_icon" class="fa fa-battery-4"></i><br>
+				<div class="data_item" ng-style="batteryStyle">
+					<i id="battery_icon" ng-class="batteryIconClass"></i><br>
 					<span ng-bind="battery"></span><span class='small_text'>%</span>
 				</div>
-				<div class="data_item" id="pedometer">
+				<div class="data_item">
 					<i class="fa fa-tachometer"></i><br>
 					<span ng-bind="speed"></span><span class='small_text'>km/h</span>
 				</div>

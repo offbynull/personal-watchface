@@ -75,7 +75,21 @@ limitations under the License.
 			<canvas class="graph" id="sport_chart"></canvas>
 		</div>
 		<div class="screen-front">
-			<p class="news_text">text</p>
+			<div class="timer_text" ng-bind="time"></div>
+			<div class="data_text">
+				<div class="data_item">
+					<i class="fa fa-heartbeat"></i><br>
+					<span ng-bind="heartrate"></span><span class='small_text'>bpm</span>
+				</div>
+				<div class="data_item" ng-style="batteryStyle">
+					<i id="battery_icon" ng-class="batteryIconClass"></i><br>
+					<span ng-bind="battery"></span><span class='small_text'>%</span>
+				</div>
+				<div class="data_item" ng-style="speedStyle">
+					<i class="fa fa-tachometer"></i><br>
+					<span ng-bind="speed"></span><span class='small_text'>km/h</span>
+				</div>
+			</div>
 		</div>
 		<div class="screen-nav">
 			<div class="left-button" ng-click="prevScreen()"><i class="fa fa-chevron-left"></i></div>

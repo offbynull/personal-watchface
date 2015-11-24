@@ -26,19 +26,43 @@ personalWatchfaceApp.factory('MainService', ['$rootScope', '$interval', '$http',
 		});
 	}
 	
-	if (typeof tizen.humanactivitymonitor !== 'undefined') {
-		tizen.humanactivitymonitor.start('HRM', function(hrmInfo)  {
-			$rootScope.$broadcast('main:heartRateChanged', hrmInfo.heartRate);
-		});
-	
-		tizen.humanactivitymonitor.setAccumulativePedometerListener(function updatePedometer(pmInfo) {
-			$rootScope.$broadcast('main:pedometerChanged', pmInfo.stepStatus);
-		});
-	}
 
 
 
 	// External variables and functions
+	service.startHeartrate = function() {
+		if (typeof tizen.humanactivitymonitor !== 'undefined') {
+			tizen.humanactivitymonitor.start('HRM', function(hrmInfo)  {
+				$rootScope.$broadcast('main:heartRateChanged', hrmInfo.heartRate);
+			});
+		}
+	}
+	
+	service.stopHeartrate = function() {
+		if (typeof tizen.humanactivitymonitor !== 'undefined') {
+			tizen.humanactivitymonitor.stop('HRM');
+		}
+	}
+	
+	service.startPedometer = function() {
+		if (typeof tizen.humanactivitymonitor !== 'undefined') {
+			tizen.humanactivitymonitor.setAccumulativePedometerListener(function updatePedometer(pmInfo) {
+				$rootScope.$broadcast('main:pedometerChanged',
+						{
+							status: pmInfo.stepStatus,
+							speed: pmInfo.speed
+						}
+				);
+			});
+		}
+	}
+	
+	service.stopPedometer = function() {
+		if (typeof tizen.humanactivitymonitor !== 'undefined') {
+			tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
+		}
+	}
+	
 	service.changeView = function(mode) {
 		$rootScope.$broadcast('main:viewChanged', mode);
 	}

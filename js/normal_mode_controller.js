@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-personalWatchfaceApp.controller('NormalModeCtrl', ['MainService', '$scope', function(MainService, $scope) {
-	$scope.$on('main:viewChanged', function(event, data) {
+personalWatchfaceApp.controller('NormalModeCtrl', ['HardwareService', 'NewsService', 'WeatherService', '$scope', function(hardwareService, newsService, weatherService, $scope) {
+	$scope.$on('hardware:viewChanged', function(event, data) {
 		$scope.visible = (data == 'NORMAL');
 	});
 	
 	$scope.$watch('visible', function(newValue, oldValue) {
 		if (newValue == true) {
-			MainService.queryHeadlines();
-			MainService.queryWeather();
+			newsService.queryHeadlines();
+			weatherService.queryWeather();
 		}
 	});
 	
-	$scope.$on('main:timeChanged', function(event, data) {
+	$scope.$on('hardware:timeChanged', function(event, data) {
 		$scope.time = data.nowObj.hour + ':' + data.nowObj.minute + ':' + data.nowObj.second;
 		$scope.date = data.nowObj.date;
 	});
 
 	$scope.batteryStyle = '';
 	$scope.batteryIconClass = 'fa fa-battery-4';
-	$scope.$on('main:batteryChanged', function(event, data) {
-		$scope.battery = data;
+	$scope.$on('hardware:batteryChanged', function(event, level, charging) {
+		$scope.battery = level;
 		
 		if (level <= 20) {
 			$scope.batteryStyle = 'red';
@@ -54,17 +54,17 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['MainService', '$scope', func
 		}
 	});
 	
-	$scope.$on('main:heartRateChanged', function(event, data) {
+	$scope.$on('hardware:heartRateChanged', function(event, data) {
 		$scope.heartrate = data;
 	});
 	
-	$scope.$on('main:pedometerChanged', function(event, data) {
+	$scope.$on('hardware:pedometerChanged', function(event, data) {
 		$scope.pedometer = data;
 	});
 
 	var _weatherElem = document.querySelector('#weather_chart'); 
 	var _weatherChart = null;
-	$scope.$on('main:weatherUpdated', function(event, data) {
+	$scope.$on('weather:updated', function(event, data) {
 		if (data == null) {
 			if (_weatherChart != null) {
 				_weatherChart.clear();
@@ -139,7 +139,7 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['MainService', '$scope', func
 		}
 	});
 
-	$scope.$on('main:headlinesUpdated', function(event, data) {
+	$scope.$on('news:updated', function(event, data) {
 		$scope.newsIndex = 0;
 		$scope.news = data;
 		
@@ -156,6 +156,6 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['MainService', '$scope', func
 	}
 	
 	$scope.nextScreen = function() {
-		MainService.changeView('SPORT');
+		hardwareService.changeView('SPORT');
 	}
 }]);

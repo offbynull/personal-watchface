@@ -54,14 +54,12 @@ html,body {
 }
 
 .screen {
-	width: 100%;
-	height: 100%;
+	width: 360px;
+	height: 360px;
 }
 
 .screen-front {
 	position: absolute;
-	width: 100%;
-	height: 100%;
 	z-index: 1;
 }
 
@@ -69,8 +67,8 @@ html,body {
 	pointer-events: none;
 	
 	position: absolute;
-	width: 100%;
-	height: 100%;
+	width: 360px;
+	height: 360px;
 	z-index: 2;
 }
 
@@ -79,11 +77,12 @@ html,body {
 	
 	position: absolute;
     background-color: #ffffff;
-    line-height: 50px;
+    font-size: 40px;
+    line-height: 105px;
     opacity: 0.3;
-    top: 168px;
-    width: 25px;
-    height: 50px;
+    top: 130px;
+    width: 50px;
+    height: 100px;
     border-radius: 100% / 50%;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -94,49 +93,27 @@ html,body {
 	
     position: absolute;
     background-color: #ffffff;
-    line-height: 50px;
+    font-size: 40px;
+    line-height: 105px;
     text-align: right;
     opacity: 0.3;
-    top: 168px;
-    left: 335px;
-    width: 25px;
-    height: 50px;
+    top: 130px;
+    left: 310px;
+    width: 50px;
+    height: 100px;
     border-radius: 100% / 50%;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
 
-.fill_outter {
-	width: 100%;
-	height: 100%;
-	margin: 0px;
-}
-
-.fill_inner {
-	position: absolute;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: column flex-direction: column;
-	-webkit-align-items: center;
-	align-items: center;
-	-webkit-justify-content: center;
-	justify-content: center;
-	width: 100%;
-	height: 100%;
-	margin: 0px;
-}
-
-.fill_inner_inner {
-	text-align: center;
-	width: 100%;
-}
-
 .date_text {
+	margin-top: 60px;
+	
 	font-family: 'Orbitron';
 	font-size: 16px;
 	color: white;
 	text-align: center;
-	width: 100%;
+	width: 360px;
 }
 
 .time_text {
@@ -144,68 +121,53 @@ html,body {
 	font-size: 42px;
 	color: white;
 	text-align: center;
-	width: 100%;
+	width: 360px;
 }
 
-.counter_text {
-	text-align: center;
-	width: 100%;
-}
+.counter_increase_button {
+	background: #a0a0a0;
 
-.counter_text .data_button {
-	display: inline-block;
-	text-align: center;
-	
-	cursor: pointer;
-	
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	
-	-webkit-border-radius: 20;
-	-moz-border-radius: 20;
-	border-radius: 20px;
+	top: 0px;
+	left: 0px;
+	height: 120px;
+	width: 360px;
+
 	font-family: Trebuchet, Arial, sans-serif;
 	font-weight: bold;
 	color: #ffffff;
-	font-size: 14px;
-	padding-right: 10px;
-	padding-left: 10px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background: #34A7C1;
-	border: solid #ffffff 2px;
-	text-decoration: none;
-	
-	opacity: 0.4;
+	font-size: 120px;
+
+	text-align: center;
 }
 
-.counter_text .data_item {
-	display: inline-block;
-	text-align: center;
-	
-	width: 30%;
-	
-	cursor: pointer;
-	
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
+.counter_reset_button {
+	top: 120px;
+	left: 0px;
+	height: 120px;
+	width: 360px;
 
-	font-family: 'Orbitron';
-	font-size: 28px;
+	font-family: Trebuchet, Arial, sans-serif;
 	font-weight: bold;
 	color: #ffffff;
+	font-size: 108px;
+	
+	text-align: center;
 }
 
-.counter_text .data_item:first-child {
-	margin-left: 60px;
-	float: left;
-}
+.counter_decrease_button {
+	background: #a0a0a0;
 
-.counter_text .data_item:last-child {
-	margin-right: 60px;
-	float: right;
+	top: 240px;
+	left: 0px;
+	height: 120px;
+	width: 360px;
+
+	font-family: Trebuchet, Arial, sans-serif;
+	font-weight: bold;
+	color: #ffffff;
+	font-size: 120px;
+	
+	text-align: center;
 }
 
 .data_text {
@@ -213,7 +175,7 @@ html,body {
 	font-size: 28px;
 	color: white;
 	text-align: center;
-	width: 100%;
+	width: 360px;
 }
 
 .data_text .small_text {
@@ -231,133 +193,19 @@ html,body {
 	font-size: 16px;
 	color: white;
 	text-align: center;
-	width: 100%;
+	width: 360px;
 	margin-top: 16px;
 	margin-bottom: 16px;
 }
 
-.switch_text {
-	font-family: 'Orbitron';
-	font-size: 16px;
-	color: white;
-	text-align: center;
-	width: 100%;
-}
-
-.canvas {
-	background: #000;
-	width: 100%;
-	height: 100%;
-	margin: 0px;
-	opacity: 1.0;
-}
-
-.table {
-	width: 100%;
-	border: 0px;
-	margin: 0px;
-	padding: 0px;
-}
-
-.table_item {
-	width: 50%;
-	float: left;
-	border: 0px;
-	margin: 0px;
-	padding: 0px;
-	margin-bottom: 8px;
-}
-
 .graph {
 	position: absolute;
-	top: 20px;
+	top: 0px;
 	left: 20px;
 	width: 320px;
 	height: 320px;
 	margin: 0px;
-	pointer-events: none;
-	/* If not present, stops news item from getting click input */
-}
-
-/* TAKEN FROM: https://proto.io/freebies/onoff/ */
-.onoffswitch {
-	position: relative;
-	width: 90px;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	display: block;
-	margin: auto;
 	
-	opacity: 0.4;
-}
-
-.onoffswitch-checkbox {
-	display: none;
-}
-
-.onoffswitch-label {
-	display: block;
-	overflow: hidden;
-	cursor: pointer;
-	border: 2px solid #999999;
-	border-radius: 20px;
-}
-
-.onoffswitch-inner {
-	display: block;
-	width: 200%;
-	margin-left: -100%;
-	transition: margin 0.3s ease-in 0s;
-}
-
-.onoffswitch-inner:before,.onoffswitch-inner:after {
-	display: block;
-	float: left;
-	width: 50%;
-	height: 30px;
-	padding: 0;
-	line-height: 30px;
-	font-size: 14px;
-	color: white;
-	font-family: Trebuchet, Arial, sans-serif;
-	font-weight: bold;
-	box-sizing: border-box;
-}
-
-.onoffswitch-inner:before {
-	content: "ON";
-	padding-left: 10px;
-	background-color: #34A7C1;
-	color: #FFFFFF;
-}
-
-.onoffswitch-inner:after {
-	content: "OFF";
-	padding-right: 10px;
-	background-color: #EEEEEE;
-	color: #999999;
-	text-align: right;
-}
-
-.onoffswitch-switch {
-	display: block;
-	width: 18px;
-	margin: 6px;
-	background: #FFFFFF;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 56px;
-	border: 2px solid #999999;
-	border-radius: 20px;
-	transition: all 0.3s ease-in 0s;
-}
-
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
-	margin-left: 0;
-}
-
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
-	right: 0px;
+	/* If not present, stops news item from getting click input */
+	pointer-events: none;
 }

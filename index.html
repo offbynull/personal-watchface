@@ -31,9 +31,13 @@ limitations under the License.
 <script src="js/sport_chart.js"></script>
 
 <script src="js/main.js"></script>
-<script src="js/main_service.js"></script>
+<script src="js/angular-visibility-change.js"></script>
+<script src="js/news_service.js"></script>
+<script src="js/weather_service.js"></script>
+<script src="js/hardware_service.js"></script>
 <script src="js/normal_mode_controller.js"></script>
 <script src="js/sport_mode_controller.js"></script>
+<script src="js/counter_mode_controller.js"></script>
 
 
 <link rel="stylesheet" href="css/style.css" />
@@ -93,64 +97,22 @@ limitations under the License.
 		</div>
 		<div class="screen-nav">
 			<div class="left-button" ng-click="prevScreen()"><i class="fa fa-chevron-left"></i></div>
+			<div class="right-button" ng-click="nextScreen()"><i class="fa fa-chevron-right"></i></div>
 		</div>
 	</div>
 
-<!--
-	<div class="fill_outter">
-		<div class="fill_inner">
-			<canvas class="graph" id="sport_chart"></canvas>
-			<canvas class="graph" id="weather_chart"></canvas>
-			<div class="fill_inner_inner" style="z-index: 1">
-				<div class="counter_text" id="counters">
-					<div class="data_button" onclick='decrementCounter()'>-1</div>
-					<div class="data_item" id="number"  onclick='zeroCounter()'></div>
-					<div class="data_button" onclick='incrementCounter()'>+1</div>
-				</div>
-				<div class="date_text" id="date"></div>
-				<div class="time_text" id="time"></div>
-				<div class="data_text" id="sensor">
-					<div class="data_item" id="heartrate">
-						<i class="fa fa-heartbeat"></i><br>
-						<span id="heartrate_level"></span><span class='small_text'>bpm</span>
-					</div>
-					<div class="data_item" id="battery">
-						<i id="battery_icon" class="fa fa-battery-4"></i><br>
-						<span id="battery_level"></span><span class='small_text'>%</span>
-					</div>
-					<div class="data_item" id="pedometer">
-						<i class="fa fa-tachometer"></i><br>
-						<span id="pedometer_level"></span><span class='small_text'>km/h</span>
-					</div>
-				</div>
-				<p id="news" class="news_text"></p>
-				
-				<div class="table">
-					<div class="table_item">
-						<span class="switch_text">Sport</span>
-						<div class="onoffswitch">
-						    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="sportSwitch" onchange="sportSwitched(this)">
-					    	<label class="onoffswitch-label" for="sportSwitch">
-						        <span class="onoffswitch-inner"></span>
-						        <span class="onoffswitch-switch"></span>
-						    </label>
-						</div>
-					</div>
-					
-					<div class="table_item">
-						<span class="switch_text">Timer</span>
-						<div class="onoffswitch">
-						    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="timerSwitch" onchange="timerSwitched(this)">
-						    <label class="onoffswitch-label" for="timerSwitch">
-						        <span class="onoffswitch-inner"></span>
-						        <span class="onoffswitch-switch"></span>
-						    </label>
-						</div>
-					</div>
-				</div>
-			</div>
+
+	<div class="screen" ng-controller="CounterModeCtrl" ng-show="visible == true">
+		<div class="screen-back">
+		</div>
+		<div class="screen-front">
+			<div class="counter_increase_button" ng-click="count = count + 1">ADD</div>
+			<div class="counter_reset_button" ng-click="count = 0">{{count}}</div>
+			<div class="counter_decrease_button" ng-click="count = count - 1">SUB</div>
+		</div>
+		<div class="screen-nav">
+			<div class="left-button" ng-click="prevScreen()"><i class="fa fa-chevron-left"></i></div>
 		</div>
 	</div>
--->
 </body>
 </html>

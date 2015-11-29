@@ -24,14 +24,15 @@ limitations under the License.
 <title>Personal Watchface</title>
 
 <script src="js/dateformat.js"></script>
-<script src="js/chart.min.js"></script>
 <script src="js/xml2json.min.js"></script>
+<script src="js/chart.js"></script>
+
 <script src="js/angular.js"></script>
+<script src="js/angular-visibility-change.js"></script>
 
 <script src="js/sport_chart.js"></script>
 
 <script src="js/main.js"></script>
-<script src="js/angular-visibility-change.js"></script>
 <script src="js/news_service.js"></script>
 <script src="js/weather_service.js"></script>
 <script src="js/hardware_service.js"></script>
@@ -48,7 +49,7 @@ limitations under the License.
 
 	<div class="screen" id="normalScreen" ng-controller="NormalModeCtrl" ng-init="visible = true" ng-show="visible == true">
 		<div class="screen-back">
-			<canvas class="graph" id="weather_chart"></canvas>
+			<canvas id="weather_chart" class="graph"></canvas>
 		</div>
 		<div class="screen-front">
 			<div class="date_text" ng-bind="date"></div>

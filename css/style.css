@@ -143,18 +143,21 @@ html,body {
 }
 
 #normalScreen .news_text {
+	margin-top: 30px;
+	margin-left: 20px;
+	margin-right: 20px;
+	
+	width: 320px;
+	
 	font-family: 'Orbitron';
 	font-size: 16px;
 	color: white;
 	text-align: center;
-	width: 360px;
-	margin-top: 16px;
-	margin-bottom: 16px;
 }
 
 
 #sportScreen .timer_text {
-	margin-top: 60px;
+	margin-top: 80px;
 	
 	font-family: 'Orbitron';
 	font-size: 42px;
@@ -230,10 +233,9 @@ html,body {
 .graph {
 	position: absolute;
 	top: 0px;
-	left: 20px;
-	width: 320px;
-	height: 320px;
-	margin: 0px;
+	left: 0px;
+	width: 360px;
+	height: 360px;
 	
 	/* If not present, stops news item from getting click input */
 	pointer-events: none;

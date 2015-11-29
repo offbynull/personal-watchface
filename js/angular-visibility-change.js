@@ -1,9 +1,13 @@
 // https://github.com/stephenkubovic/angular-visibility-change
 //
-// Updated to ...
-// 1. use the PersonalWatchface module
-// 2. notify of visibilty on add
-personalWatchfaceApp.service('VisibilityChange', ['$document', '$rootScope', '$timeout', function($document, $rootScope, $timeout) {
+// Updated to notify of visibilty on add
+(function() {
+
+'use strict';
+
+var module = angular.module('visibilityChange', []);
+
+module.service('VisibilityChange', ['$document', '$rootScope', '$timeout', function($document, $rootScope, $timeout) {
 
   var broadcastVisibleEvent = 'pageBecameVisible',
       broadcastHiddenEvent = 'pageBecameHidden',
@@ -95,3 +99,5 @@ personalWatchfaceApp.service('VisibilityChange', ['$document', '$rootScope', '$t
 	  onVisibilityChange();
   }
 }]);
+
+})();

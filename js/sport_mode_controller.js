@@ -21,7 +21,8 @@ personalWatchfaceApp.controller('SportModeCtrl', ['HardwareService', '$scope', f
 
 	var TIMER_STATE_ACTIVE = 0;
 	var TIMER_STATE_INACTIVE = 1;
-	var timerState = TIMER_STATE_ACTIVE;
+	var timerState = TIMER_STATE_INACTIVE;
+	$scope.timer = '00:00:00';
 	$scope.$on('hardware:timeChanged', function(event, data) {
 		if (timerState == TIMER_STATE_ACTIVE) {
 			$scope.timer = data.timerObj.hour + ':' + data.timerObj.minute + ':' + data.timerObj.second;

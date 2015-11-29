@@ -113,16 +113,18 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['HardwareService', 'NewsServi
 					responsive: false,
 					maintainAspectRatio: false,
 					showTooltips: false,
-				    scaleShowGridLines : false,
-				    scaleGridLineColor : 'rgba(0,0,0,.05)',
-				    scaleGridLineWidth : 1,
+				    scaleShowGridLines: false,
+				    scaleGridLineColor: 'rgba(0,0,0,.05)',
+				    scaleGridLineWidth: 1,
 				    scaleShowHorizontalLines: false,
 				    scaleShowVerticalLines: false,
-				    bezierCurve : true,
-				    pointDot : false,
-				    datasetStroke : true,
-				    datasetStrokeWidth : 2,
-				    datasetFill : true,
+				    bezierCurve: true,
+				    pointDot: false,
+				    datasetStroke: true,
+				    datasetStrokeWidth: 2,
+				    datasetFill: true,
+				    xAxisPosition: 195, // REQUIRES CUSTOM MODIFIED CHARTJS
+				    yAxisPosition: 155, // REQUIRES CUSTOM MODIFIED CHARTJS
 				};
 			
 			_weatherChart = new Chart(_weatherElem.getContext('2d')).Line(lineData, options);

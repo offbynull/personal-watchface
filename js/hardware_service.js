@@ -53,7 +53,13 @@ personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$ht
 				
 				if (hr < 0) {
 					// Set HR value to E if value is error
-					hr = 'E'
+					hr = 'E';
+					
+					// Kill reset timer if it's active
+					if (hrmResetTimer != null) {
+						$interval.cancel(hrmResetTimer);
+						hrmResetTimer = null;
+					}
 				} else if (hr == 0) {
 					// Set HR value to spinner if value is initializing
 					hrmSpinnerIdx++;
@@ -64,7 +70,7 @@ personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$ht
 
 					// Watch will return 0's for a while before getting a heart rate. After 20 seconds the watch gives up,
 					// so reset the HRM after 20 seconds if it continually gets 0s.
-					if (hrmResetTimer != null) {
+					if (hrmResetTimer == null) {
 						hrmResetTimer = $interval(resetFunction, 20000);
 					}
 				} else {
@@ -78,7 +84,7 @@ personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$ht
 				$rootScope.$broadcast('hardware:heartRateChanged', hr);
 			};
 
-			tizen.humanactivitymonitor.start('HRM', updateFunction); 
+			tizen.humanactivitymonitor.start('HRM', updateFunction);
 
 
 			// Pedometer

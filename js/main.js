@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-personalWatchfaceApp = angular.module('PersonalWatchfaceApp', []);
+personalWatchfaceApp = angular.module('PersonalWatchfaceApp', ['visibilityChange']);

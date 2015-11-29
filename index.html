@@ -46,7 +46,7 @@ limitations under the License.
 </head>
 <body>
 
-	<div class="screen" ng-controller="NormalModeCtrl" ng-init="visible = true" ng-show="visible == true">
+	<div class="screen" id="normalScreen" ng-controller="NormalModeCtrl" ng-init="visible = true" ng-show="visible == true">
 		<div class="screen-back">
 			<canvas class="graph" id="weather_chart"></canvas>
 		</div>
@@ -74,12 +74,12 @@ limitations under the License.
 		</div>
 	</div>
 
-	<div class="screen" ng-controller="SportModeCtrl" ng-show="visible == true">
+	<div class="screen" id="sportScreen" ng-controller="SportModeCtrl" ng-show="visible == true">
 		<div class="screen-back">
 			<canvas class="graph" id="sport_chart"></canvas>
 		</div>
 		<div class="screen-front">
-			<div class="timer_text" ng-bind="time"></div>
+			<div class="timer_text" ng-click="updateTimerState()" ng-bind="timer"></div>
 			<div class="data_text">
 				<div class="data_item">
 					<i class="fa fa-heartbeat"></i><br>
@@ -102,7 +102,7 @@ limitations under the License.
 	</div>
 
 
-	<div class="screen" ng-controller="CounterModeCtrl" ng-show="visible == true">
+	<div class="screen" id="counterScreen" ng-controller="CounterModeCtrl" ng-show="visible == true">
 		<div class="screen-back">
 		</div>
 		<div class="screen-front">

@@ -18,9 +18,14 @@ personalWatchfaceApp.controller('SportModeCtrl', ['HardwareService', '$scope', f
 	$scope.$on('hardware:viewChanged', function(event, data) {
 		$scope.visible = (data == 'SPORT');
 	});
-	
+
+	var TIMER_STATE_ACTIVE = 0;
+	var TIMER_STATE_INACTIVE = 1;
+	var timerState = TIMER_STATE_ACTIVE;
 	$scope.$on('hardware:timeChanged', function(event, data) {
-		$scope.timer = data.timerObj.hour + ':' + data.timerObj.minute + ':' + data.timerObj.second;
+		if (timerState == TIMER_STATE_ACTIVE) {
+			$scope.timer = data.timerObj.hour + ':' + data.timerObj.minute + ':' + data.timerObj.second;
+		}
 	});
 
 	$scope.batteryStyle = '';
@@ -113,6 +118,17 @@ personalWatchfaceApp.controller('SportModeCtrl', ['HardwareService', '$scope', f
 			$scope.speed = data.speed;
 		}
 	});
+
+	$scope.updateTimerState = function() {
+		if (timerState == TIMER_STATE_ACTIVE) {
+			timerState = TIMER_STATE_INACTIVE;
+		} else if (timerState == TIMER_STATE_INACTIVE) {
+			hardwareService.resetTimer();
+			timerState = TIMER_STATE_ACTIVE;
+		} else {
+			throw "BAD TIMER STATE"
+		}
+	}
 	
 	$scope.prevScreen = function() {
 		hardwareService.changeView('NORMAL');

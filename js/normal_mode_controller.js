@@ -31,35 +31,27 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['HardwareService', 'NewsServi
 		$scope.date = data.nowObj.date;
 	});
 
-	$scope.batteryStyle = '';
+	$scope.batteryColor = '';
 	$scope.batteryIconClass = 'fa fa-battery-4';
 	$scope.$on('hardware:batteryChanged', function(event, level, charging) {
 		$scope.battery = level;
 		
 		if (level <= 20) {
-			$scope.batteryStyle = 'red';
+			$scope.batteryColor = 'red';
 			$scope.batteryIconClass = 'fa fa-battery-0';
 		} else if (level <= 40) { 
-			$scope.batteryStyle = 'yellow';
+			$scope.batteryColor = 'yellow';
 			$scope.batteryIconClass = 'fa fa-battery-1';
 		} else if (level <= 60) {
-			$scope.batteryStyle = '';
+			$scope.batteryColor = '';
 			$scope.batteryIconClass = 'fa fa-battery-2';
 		} else if (level < 80) {
-			$scope.batteryStyle = '';
+			$scope.batteryColor = '';
 			$scope.batteryIconClass = 'fa fa-battery-3';
 		} else {
-			$scope.batteryStyle = '';
+			$scope.batteryColor = '';
 			$scope.batteryIconClass = 'fa fa-battery-4';
 		}
-	});
-	
-	$scope.$on('hardware:heartRateChanged', function(event, data) {
-		$scope.heartrate = data;
-	});
-	
-	$scope.$on('hardware:pedometerChanged', function(event, data) {
-		$scope.pedometer = data;
 	});
 
 	var _weatherElem = document.querySelector('#weather_chart'); 
@@ -113,11 +105,16 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['HardwareService', 'NewsServi
 					responsive: false,
 					maintainAspectRatio: false,
 					showTooltips: false,
-				    scaleShowGridLines: false,
-				    scaleGridLineColor: 'rgba(0,0,0,.05)',
+				    scaleShowGridLines: true,
+				    scaleGridLineColor: 'rgb(50,50,50)',
 				    scaleGridLineWidth: 1,
-				    scaleShowHorizontalLines: false,
-				    scaleShowVerticalLines: false,
+				    scaleShowHorizontalLines: true,
+				    scaleShowVerticalLines: true,
+				    scaleOverlay: true,
+				    scaleOverride: true,
+				    scaleSteps: 8,
+				    scaleStepWidth: 5,
+				    scaleStartValue: -5,
 				    bezierCurve: true,
 				    pointDot: false,
 				    datasetStroke: true,

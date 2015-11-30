@@ -30,8 +30,6 @@ limitations under the License.
 <script src="js/angular.js"></script>
 <script src="js/angular-visibility-change.js"></script>
 
-<script src="js/sport_chart.js"></script>
-
 <script src="js/main.js"></script>
 <script src="js/news_service.js"></script>
 <script src="js/weather_service.js"></script>
@@ -56,16 +54,12 @@ limitations under the License.
 			<div class="time_text" ng-bind="time"></div>
 			<div class="data_text">
 				<div class="data_item">
-					<i class="fa fa-heartbeat"></i><br>
-					<span ng-bind="heartrate"></span><span class='small_text'>bpm</span>
 				</div>
-				<div class="data_item" ng-style="batteryStyle">
+				<div class="data_item" ng-style="{'color':batteryColor}">
 					<i id="battery_icon" ng-class="batteryIconClass"></i><br>
 					<span ng-bind="battery"></span><span class='small_text'>%</span>
 				</div>
 				<div class="data_item">
-					<i class="fa fa-tachometer"></i><br>
-					<span ng-bind="speed"></span><span class='small_text'>km/h</span>
 				</div>
 			</div>
 			<p class="news_text" ng-bind="newsItem" ng-click="nextNewsItem()"></p>
@@ -77,24 +71,25 @@ limitations under the License.
 
 	<div class="screen" id="sportScreen" ng-controller="SportModeCtrl" ng-show="visible == true">
 		<div class="screen-back">
-			<canvas class="graph" id="sport_chart"></canvas>
+			<canvas id="sport_chart" class="graph"></canvas>
 		</div>
 		<div class="screen-front">
 			<div class="timer_text" ng-click="updateTimerState()" ng-bind="timer"></div>
 			<div class="data_text">
-				<div class="data_item">
+				<div class="data_item" ng-style="{'color':heartrateColor}">
 					<i class="fa fa-heartbeat"></i><br>
 					<span ng-bind="heartrate"></span><span class='small_text'>bpm</span>
 				</div>
-				<div class="data_item" ng-style="batteryStyle">
+				<div class="data_item" ng-style="{'color':batteryColor}">
 					<i id="battery_icon" ng-class="batteryIconClass"></i><br>
 					<span ng-bind="battery"></span><span class='small_text'>%</span>
 				</div>
-				<div class="data_item" ng-style="speedStyle">
+				<div class="data_item" ng-style="{'color':speedColor">
 					<i class="fa fa-tachometer"></i><br>
 					<span ng-bind="speed"></span><span class='small_text'>km/h</span>
 				</div>
 			</div>
+			<div class="sport_toggle_button" ng-click="toggle()">{{toggleName}}</div>
 		</div>
 		<div class="screen-nav">
 			<div class="left-button" ng-click="prevScreen()"><i class="fa fa-chevron-left"></i></div>

@@ -143,14 +143,14 @@ html,body {
 }
 
 #normalScreen .news_text {
-	margin-top: 30px;
+	margin-top: 20px;
 	margin-left: 20px;
 	margin-right: 20px;
 	
 	width: 320px;
 	
 	font-family: 'Orbitron';
-	font-size: 16px;
+	font-size: 24px;
 	color: white;
 	text-align: center;
 }
@@ -181,6 +181,26 @@ html,body {
 #sportScreen .data_text .data_item {
 	display: inline-block;
 	width: 30%;
+	text-align: center;
+}
+
+#sportScreen .sport_toggle_button {
+	background: #a0a0a0;
+	opacity: 0.4;
+
+	margin-top: 20px;
+	margin-left: 130px;
+	margin-right: 130px;
+	border-radius: 50%;
+	width: 100px;
+	height: 100px;
+
+	font-family: Trebuchet, Arial, sans-serif;
+	font-weight: bold;
+	color: #ffffff;
+	font-size: 24px;
+	line-height: 100px;
+	
 	text-align: center;
 }
 

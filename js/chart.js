@@ -1660,8 +1660,14 @@
 					linePositionY += helpers.aliasPixel(ctx.lineWidth);
 
 					if(drawHorizontalLine){
-						ctx.moveTo(xStart, linePositionY);
-						ctx.lineTo(this.width, linePositionY);
+						if (typeof this.xAxisPosition !== 'undefined') {
+							ctx.moveTo(Math.round(this.xScalePaddingLeft), linePositionY);
+							ctx.lineTo(this.width, linePositionY);
+						} else {
+							ctx.moveTo(xStart, linePositionY);
+							ctx.lineTo(this.width, linePositionY);
+							ctx.stroke();
+						}
 						ctx.stroke();
 						ctx.closePath();
 					}

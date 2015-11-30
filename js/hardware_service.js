@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$http', 'VisibilityChange', function ($rootScope, $interval, $http, visibilityChange) {
+personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$timeout', '$http', 'VisibilityChange', function ($rootScope, $interval, $timeout, $http, visibilityChange) {
 	var service = {};
 
 
@@ -28,75 +28,61 @@ personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$ht
 		});
 	}
 
-	var SPINNER = ['|', '/', '-', '\\'];
-	var hrmSpinnerIdx = 0;
 	var hrmResetTimer = null;
 	visibilityChange.onVisible(function() {
     	if (forcedOn) {
     		return;
     	}
 
-		if (typeof tizen.humanactivitymonitor !== 'undefined') {
-			// HRM
-			var resetFunction = null;
-			var updateFunction = null;
+		if (typeof tizen.humanactivitymonitor === 'undefined') {
+			return;
+		}
+
+		// HRM
+		var resetFunction = null;
+		var updateFunction = null;
 			
-			// Function to reset the HRM
-			resetFunction = function() {
-				tizen.humanactivitymonitor.stop('HRM');
-				tizen.humanactivitymonitor.start('HRM', updateFunction);				
+		// Function to reset the HRM
+		resetFunction = function() {
+			tizen.humanactivitymonitor.stop('HRM');
+			tizen.humanactivitymonitor.start('HRM', updateFunction);				
+		}
+			
+		// Function to process heart rates
+		updateFunction = function(hrmInfo)  {
+			var hr = hrmInfo.heartRate;
+				
+			if (hr <= 0) {
+				// Watch will return 0's for a while before getting a heart rate. After 20 seconds the watch gives up,
+				// so reset the HRM after 20 seconds if it continually gets 0s.
+				//
+				// Negatives mean error
+				if (hrmResetTimer == null) {
+					hrmResetTimer = $interval(resetFunction, 20000);
+				}
+			} else {
+				// Kill reset timer if it's active
+				if (hrmResetTimer != null) {
+					$interval.cancel(hrmResetTimer);
+					hrmResetTimer = null;
+				}
 			}
 			
-			// Function to process heart rates
-			updateFunction = function(hrmInfo)  {
-				var hr = hrmInfo.heartRate;
-				
-				if (hr < 0) {
-					// Set HR value to E if value is error
-					hr = 'E';
-					
-					// Kill reset timer if it's active
-					if (hrmResetTimer != null) {
-						$interval.cancel(hrmResetTimer);
-						hrmResetTimer = null;
-					}
-				} else if (hr == 0) {
-					// Set HR value to spinner if value is initializing
-					hrmSpinnerIdx++;
-					if (hrmSpinnerIdx >= SPINNER.length) {
-						hrmSpinnerIdx = 0;
-					}
-					hr = SPINNER[hrmSpinnerIdx % SPINNER.length];
+			$rootScope.$broadcast('hardware:heartRateChanged', hr);
+		};
 
-					// Watch will return 0's for a while before getting a heart rate. After 20 seconds the watch gives up,
-					// so reset the HRM after 20 seconds if it continually gets 0s.
-					if (hrmResetTimer == null) {
-						hrmResetTimer = $interval(resetFunction, 20000);
-					}
-				} else {
-					// Kill reset timer if it's active
-					if (hrmResetTimer != null) {
-						$interval.cancel(hrmResetTimer);
-						hrmResetTimer = null;
-					}
-				}
-				
-				$rootScope.$broadcast('hardware:heartRateChanged', hr);
-			};
-
-			tizen.humanactivitymonitor.start('HRM', updateFunction);
+		tizen.humanactivitymonitor.start('HRM', updateFunction);
 
 
-			// Pedometer
-			tizen.humanactivitymonitor.setAccumulativePedometerListener(function updatePedometer(pmInfo) {
-				$rootScope.$broadcast('hardware:pedometerChanged',
-						{
-							status: pmInfo.stepStatus,
-							speed: pmInfo.speed
-						}
-				);
-			});
-		}
+		// Pedometer
+		tizen.humanactivitymonitor.setAccumulativePedometerListener(function updatePedometer(pmInfo) {
+			$rootScope.$broadcast('hardware:pedometerChanged',
+					{
+						status: pmInfo.stepStatus,
+						speed: pmInfo.speed
+					}
+			);
+		});
 
 		$rootScope.$broadcast('hardware:powerChanged', true);
     });
@@ -106,15 +92,12 @@ personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$ht
     		return;
     	}
     	
-    	if (typeof tizen.humanactivitymonitor !== 'undefined') {
-			if (typeof tizen.humanactivitymonitor !== 'undefined') {
-				tizen.humanactivitymonitor.stop('HRM');
-			}
-
-			if (typeof tizen.humanactivitymonitor !== 'undefined') {
-				tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
-			}
-		}
+    	if (typeof tizen.humanactivitymonitor === 'undefined') {
+    		return;
+    	}
+    	
+		tizen.humanactivitymonitor.stop('HRM');
+		tizen.humanactivitymonitor.unsetAccumulativePedometerListener();
 
     	$rootScope.$broadcast('hardware:powerChanged', false);
     });
@@ -129,30 +112,43 @@ personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$ht
 	}
 	
 	service.forceCpu = function(on) {
-		if (typeof tizen.power !== undefined) {
-			if (on) {
-				tizen.power.request('CPU', 'CPU_AWAKE');	
-			} else {
-				tizen.power.release('CPU');				
-			}
+		if (typeof tizen.power === 'undefined') {
+			return;
+		}
+		
+		if (on) {
+			tizen.power.request('CPU', 'CPU_AWAKE');
+			forcedOn = true;
+		} else {
+			tizen.power.release('CPU');
+			forcedOn = false;
 		}
 	}
 
-	service.forceScreen = function(on) {
-		if (typeof tizen.power !== undefined) {
-			if (on) {
-				tizen.power.request('SCREEN', 'SCREEN_NORMAL');	
-			} else {
-				tizen.power.release('SCREEN');				
-			}
-		}
-	}
-
+	var vibrating = false;
 	service.vibrate = function(time) {
-		if (typeof navigator.vibrate !== 'undefined' && typeof tizen.power !== undefined) {
-			tizen.power.turnScreenOn(); // turn screen on, or else vibrate won't work
-			navigator.vibrate(time);
+		if (typeof navigator.vibrate === 'undefined' || typeof tizen.power === 'undefined') {
+			return;
 		}
+		
+		if (vibrating) {
+			return;
+		}
+
+		vibrating = true;
+		
+		// Attempt to deal with race condition by forcing screen on, waiting a bit, vibrating, then releasing the screen off
+		tizen.power.request('SCREEN', 'SCREEN_NORMAL');
+		tizen.power.turnScreenOn(); // turn screen on, or else vibrate won't work
+		
+		$timeout(function() {
+			navigator.vibrate(time);
+		}, 100);
+
+		$timeout(function() {
+			tizen.power.release('SCREEN');
+			vibrating = false;
+		}, time);
 	}
 
 

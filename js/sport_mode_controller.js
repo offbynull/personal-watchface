@@ -151,12 +151,14 @@ personalWatchfaceApp.controller('SportModeCtrl', ['HardwareService', '$interval'
 			$interval.cancel(sportChartUpdater);
 			
 			hardwareService.forceCpu(false);
+			hardwareService.changeNotice(false);
 		} else {
 			// It's off, turn it on
 			sportState = true;
 			$scope.toggleName = TOGGLE_NAME_OFF;
 			
 			hardwareService.forceCpu(true);
+			hardwareService.changeNotice(true);
 
 			var sportChartMaxCount = 60 * 60 / 10; // number of seconds in an hour / 10
 			var sportChartCount = 60 * 60 / 10; // pretend like we've got a full count of points, because initial points is array of maxCount 0s

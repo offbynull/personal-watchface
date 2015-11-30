@@ -106,6 +106,10 @@ personalWatchfaceApp.service('HardwareService', ['$rootScope', '$interval', '$ti
 		$rootScope.$broadcast('hardware:viewChanged', mode);
 	}
 
+	service.changeNotice = function(on) {
+		$rootScope.$broadcast('hardware:noticeChanged', on);
+	}
+
 	var _timerStartDate = new Date();
 	service.resetTimer = function() {
 		_timerStartDate = new Date();

@@ -157,7 +157,7 @@ html,body {
 
 
 #sportScreen .timer_text {
-	margin-top: 80px;
+	margin-top: 90px;
 	
 	font-family: 'Orbitron';
 	font-size: 42px;
@@ -188,7 +188,7 @@ html,body {
 	background: #a0a0a0;
 	opacity: 0.4;
 
-	margin-top: 20px;
+	margin-top: 10px;
 	margin-left: 130px;
 	margin-right: 130px;
 	border-radius: 50%;

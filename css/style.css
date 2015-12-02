@@ -89,12 +89,12 @@ body {
 	
 	position: absolute;
     background-color: #ffffff;
-    font-size: 40px;
-    line-height: 105px;
+    font-size: 80px;
+    line-height: 145px;
     opacity: 0.3;
-    top: 130px;
-    width: 50px;
-    height: 100px;
+    top: 105px;
+    width: 70px;
+    height: 140px;
     border-radius: 100% / 50%;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -105,14 +105,14 @@ body {
 	
     position: absolute;
     background-color: #ffffff;
-    font-size: 40px;
-    line-height: 105px;
+    font-size: 80px;
+    line-height: 145px;
     text-align: right;
     opacity: 0.3;
-    top: 130px;
-    left: 310px;
-    width: 50px;
-    height: 100px;
+    top: 105px;
+    left: 290px;
+    width: 70px;
+    height: 140px;
     border-radius: 100% / 50%;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -169,16 +169,16 @@ body {
 
 
 #sportScreen .timer_text {
-	margin-top: 90px;
-	
 	font-family: 'Orbitron';
-	font-size: 42px;
+	font-size: 62px;
 	color: white;
 	text-align: center;
 	width: 360px;
 }
 
 #sportScreen .data_text {
+	margin-top: 60px;
+
 	font-family: 'Orbitron';
 	font-size: 28px;
 	color: white;
@@ -192,7 +192,7 @@ body {
 
 #sportScreen .data_text .data_item {
 	display: inline-block;
-	width: 30%;
+	width: 24%;
 	text-align: center;
 }
 

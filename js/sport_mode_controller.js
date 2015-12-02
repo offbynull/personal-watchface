@@ -19,9 +19,12 @@ personalWatchfaceApp.controller('SportModeCtrl', ['HardwareService', '$interval'
 		$scope.visible = (data == 'SPORT');
 	});
 
+	var TIMER_COLOR_ACTIVE = '';
 	var TIMER_STATE_ACTIVE = 0;
+	var TIMER_COLOR_INACTIVE = 'red';
 	var TIMER_STATE_INACTIVE = 1;
 	var timerState = TIMER_STATE_INACTIVE;
+	$scope.timerColor = TIMER_COLOR_INACTIVE; 
 	$scope.timer = '00:00:00';
 	$scope.$on('hardware:timeChanged', function(event, data) {
 		if (timerState == TIMER_STATE_ACTIVE) {
@@ -121,9 +124,11 @@ personalWatchfaceApp.controller('SportModeCtrl', ['HardwareService', '$interval'
 	$scope.updateTimerState = function() {
 		if (timerState == TIMER_STATE_ACTIVE) {
 			timerState = TIMER_STATE_INACTIVE;
+			$scope.timerColor = TIMER_COLOR_INACTIVE;
 		} else if (timerState == TIMER_STATE_INACTIVE) {
 			hardwareService.resetTimer();
 			timerState = TIMER_STATE_ACTIVE;
+			$scope.timerColor = TIMER_COLOR_ACTIVE;
 		} else {
 			throw "BAD TIMER STATE"
 		}

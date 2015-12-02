@@ -88,7 +88,7 @@ limitations under the License.
 					<span ng-bind="speed"></span><span class='small_text'>km/h</span>
 				</div>
 			</div>
-			<div class="timer_text" ng-click="updateTimerState()" ng-bind="timer"></div>
+			<div class="timer_text" ng-style="{'color':timerColor}" ng-click="updateTimerState()" ng-bind="timer"></div>
 			<div class="sport_toggle_button" ng-click="toggle()">{{toggleName}}</div>
 		</div>
 		<div class="screen-nav">

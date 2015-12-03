@@ -26,6 +26,11 @@ personalWatchfaceApp.controller('NormalModeCtrl', ['HardwareService', 'NewsServi
 		}
 	});
 	
+	$scope.$on('hardware:powerChanged', function(event, data) {
+		newsService.queryHeadlines();
+		weatherService.queryWeather();
+	});
+	
 	$scope.$on('hardware:timeChanged', function(event, data) {
 		$scope.time = data.nowObj.hour + ':' + data.nowObj.minute + ':' + data.nowObj.second;
 		$scope.date = data.nowObj.date;

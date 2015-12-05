@@ -71,9 +71,11 @@ personalWatchfaceApp.service('WeatherService', ['$rootScope', '$http', function 
 		}).then(
 				function successCallback(response) {
 					$rootScope.$broadcast('weather:updated', response.data);
+					active = false;
 				},
 				function errorCallback(response) {
 					$rootScope.$broadcast('weather:updated', null);
+					active = false;
 				}
 		);
 	}
